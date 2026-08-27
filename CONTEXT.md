@@ -37,6 +37,20 @@ Never called an *owner*. An unassigned Task has `assignee: null` — never the s
 All Tasks, taken together. The Board is what the agent is shown and what the tools change; it is
 not a separate entity with its own fields.
 
+## Team directory
+
+The list of Teammates. It lives outside the app, in a separate program the agent reaches over MCP —
+the Board does not contain it and the app never stores it. The only way the agent learns what is in
+the directory is by asking.
+
+## Teammate
+
+A person in the Team directory: a name, a team, and a free-text list of skills.
+
+A Teammate is not an Assignee. An Assignee is a name written on a Task; a Teammate is an entry in
+the directory. Nothing links the two but the name itself — no id, no reference, no join — so it is
+the agent, in language, that decides a given Teammate is the person a Task should go to.
+
 ## Mutating tool
 
 A tool the agent calls to change the Board: create, move, assign, or delete a Task. Every change
