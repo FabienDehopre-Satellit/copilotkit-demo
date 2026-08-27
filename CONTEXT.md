@@ -37,6 +37,18 @@ Never called an *owner*. An unassigned Task has `assignee: null` — never the s
 All Tasks, taken together. The Board is what the agent is shown and what the tools change; it is
 not a separate entity with its own fields.
 
+## Mutating tool
+
+A tool the agent calls to change the Board: create, move, assign, or delete a Task. Every change
+to the Board goes through one of these — the agent never edits the Board any other way.
+
+## Rendering tool
+
+A tool the agent calls purely to put something on screen in the chat. It changes nothing.
+
+The distinction is the point: a tool is not only a way to *act*, it is also a way to *show*. A
+rendering tool is never described as read-only or as a query — it renders.
+
 ## Beat
 
 One demonstrated capability in the talk: a prompt typed on stage, and what the audience sees
