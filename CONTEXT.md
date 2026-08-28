@@ -72,6 +72,23 @@ happen. The running order is a list of beats.
 
 The fixed starting Board every run begins from. Restoring the Seed is what *reset* means.
 
+## Deck
+
+The slides. A Slidev project in `slides/`, English, presented from a browser tab beside the app.
+
+The Deck is part of the repo but never part of a run of the app: `pnpm dev` does not start it. Its
+unit is the **slide**, and a slide is not a Beat — a slide names a capability, a Beat demonstrates
+it.
+
+## Trace
+
+An annotated request and response between the app and the model, shown on a slide so the audience
+can read one turn end to end.
+
+Two exist, and the difference is load-bearing: the first is *captured* from a real run, the second
+is *hand-built* so it shows only the four parts under discussion. Never called a *log* — a log is
+something you search after the fact; a Trace is something the room reads.
+
 ## Phase 1 / Phase 2
 
 The two versions of the demo and the fork the talk is built around. Phase 1 puts a Node tier
