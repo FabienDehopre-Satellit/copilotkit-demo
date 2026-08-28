@@ -89,6 +89,14 @@ Two exist, and the difference is load-bearing: the first is *captured* from a re
 is *hand-built* so it shows only the four parts under discussion. Never called a *log* — a log is
 something you search after the fact; a Trace is something the room reads.
 
+## Runsheet
+
+The document the talk is presented *from*: what to start and in what order, what to check the night
+before, and what to do when something breaks.
+
+Not the Deck and not the spec. The Deck is what the room sees; the spec is read once, by whoever
+builds the demo; the Runsheet is read every time the talk is given, and is never on screen.
+
 ## Phase 1 / Phase 2
 
 The two versions of the demo and the fork the talk is built around. Phase 1 puts a Node tier
