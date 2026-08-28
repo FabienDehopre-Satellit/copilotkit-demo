@@ -71,3 +71,13 @@ happen. The running order is a list of beats.
 ## Seed
 
 The fixed starting Board every run begins from. Restoring the Seed is what *reset* means.
+
+## Phase 1 / Phase 2
+
+The two versions of the demo and the fork the talk is built around. Phase 1 puts a Node tier
+between the app and the model; Phase 2 removes it and talks to a .NET agent instead. Everything the
+audience sees the app *do* is identical across the two — that sameness is the point.
+
+Always numbered phases, never *v1* / *v2* and never named after their stacks (*the Node one*, *the
+.NET one*), which would suggest the stack is what the audience is being asked to compare. Each
+phase is a branch, so the phase is also the branch.
