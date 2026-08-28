@@ -74,7 +74,7 @@ The fixed starting Board every run begins from. Restoring the Seed is what *rese
 
 ## Phase 1 / Phase 2
 
-The two versions of the demo, and the fork the talk is built around. Phase 1 puts a Node tier
+The two versions of the demo and the fork the talk is built around. Phase 1 puts a Node tier
 between the app and the model; Phase 2 removes it and talks to a .NET agent instead. Everything the
 audience sees the app *do* is identical across the two — that sameness is the point.
 
