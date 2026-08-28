@@ -1,0 +1,11 @@
+{
+  "name": "spike-runtime",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@copilotkit/runtime": "*",
+    "@modelcontextprotocol/sdk": "*",
+    "zod": "*", "@ai-sdk/mcp": "*", "ai": "*"
+  },
+  "devDependencies": { "tsx": "*" }
+}

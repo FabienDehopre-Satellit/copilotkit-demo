@@ -1,6 +1,4 @@
 node_modules/
-dist/
-.env
 .angular/
-bin/
-obj/
+dist/
+spike/fake-model/requests.jsonl
