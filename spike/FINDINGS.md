@@ -72,3 +72,11 @@ loops with that same array. Nothing re-reads `input.context` between steps.
 - In the request, both `function_call` entries are grouped before both
   `function_call_output` entries rather than interleaved. Harmless here, worth
   knowing if the hand-built trace (#13, trace 2) is drawn from a real payload.
+
+## Primary source
+
+`spike/fake-model/requests.jsonl` is committed: the four raw request bodies the
+model received, exactly as logged. The result table above is a summary of it —
+the file is where the frozen system message, the two `function_call_output`
+entries inside a single run, and the Responses-API request shape can be read
+directly.
