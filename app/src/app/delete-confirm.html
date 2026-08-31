@@ -1,0 +1,16 @@
+<section class="confirm">
+  @if (status() === 'complete') {
+    <p class="outcome">{{ result() }}</p>
+  } @else if (status() === 'in-progress') {
+    <p class="outcome">Working out what to delete…</p>
+  } @else if (answered()) {
+    <p class="outcome">Sending your answer…</p>
+  } @else {
+    <p class="question">Delete {{ label() }}?</p>
+    <p class="warning">Deleting removes the Task. There is no archive and no undo.</p>
+    <div class="actions">
+      <button type="button" class="danger" (click)="confirm()">Delete</button>
+      <button type="button" (click)="keep()">Keep it</button>
+    </div>
+  }
+</section>

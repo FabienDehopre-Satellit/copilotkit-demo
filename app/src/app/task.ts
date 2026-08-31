@@ -1,8 +1,8 @@
-/** Which of the three stages a Task is at. The board renders one column per status. */
-export type Status = 'todo' | 'doing' | 'done';
+/** Rendering order, left to right. Also the source of the tools' `status` enum. */
+export const STATUSES = ['todo', 'doing', 'done'] as const;
 
-/** Rendering order, left to right. */
-export const STATUSES: readonly Status[] = ['todo', 'doing', 'done'];
+/** Which of the three stages a Task is at. The board renders one column per status. */
+export type Status = (typeof STATUSES)[number];
 
 /** The only entity on the board. No Column, no Label, no due date, no priority. */
 export interface Task {

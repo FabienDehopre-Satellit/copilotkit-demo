@@ -17,7 +17,8 @@
     "@angular/router": "catalog:",
     "@copilotkit/angular": "catalog:",
     "rxjs": "catalog:",
-    "tslib": "catalog:"
+    "tslib": "catalog:",
+    "zod": "catalog:"
   },
   "devDependencies": {
     "@angular/build": "catalog:",
