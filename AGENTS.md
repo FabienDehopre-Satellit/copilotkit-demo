@@ -80,3 +80,20 @@ Match `CONTEXT.md` and the spec rather than a neutral house style.
 The spec, the Runsheet, and the Deck have three different readers and are never merged. The spec
 is read once by whoever builds this. The Runsheet is read every time the talk is given. The Deck is
 what the room sees.
+
+## Agent skills
+
+### Issue tracker
+
+Issues live in this repo's GitHub Issues, driven through the `gh` CLI. See
+[`docs/agents/issue-tracker.md`](./docs/agents/issue-tracker.md).
+
+### Triage labels
+
+The five canonical roles, each label string equal to its name. See
+[`docs/agents/triage-labels.md`](./docs/agents/triage-labels.md).
+
+### Domain docs
+
+Single-context: `CONTEXT.md` and `docs/adr/` at the repo root. See
+[`docs/agents/domain.md`](./docs/agents/domain.md).
