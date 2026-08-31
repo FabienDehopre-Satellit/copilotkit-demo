@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "ES2024",
+    "lib": ["ES2024"],
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "types": ["node"],
+    "strict": true,
+    "verbatimModuleSyntax": true,
+    "skipLibCheck": true,
+    /* Nothing here is built. `tsx` runs the source and `tsc` only type-checks. */
+    "noEmit": true
+  },
+  "include": ["src"]
+}

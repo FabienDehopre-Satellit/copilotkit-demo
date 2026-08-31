@@ -18,15 +18,22 @@ catalog:
   '@angular/forms': 22.1.4
   '@angular/platform-browser': 22.1.4
   '@angular/router': 22.1.4
+  '@copilotkit/angular': 0.3.1
+  '@copilotkit/runtime': 1.66.0
+  '@types/node': 24.13.3
   prettier: 3.9.6
   rxjs: 7.8.2
   tslib: 2.8.1
+  tsx: 4.23.13
   typescript: 6.0.3
 
 # Angular's toolchain. esbuild ships the bundler binary, the other three back the build cache.
 # Left unanswered, pnpm refuses to run their install scripts and `ng build` exits 1.
+# `@scarf/scarf` is CopilotKit's install-time analytics ping, answered `false` on the same
+# grounds: left unanswered it warns on every install.
 allowBuilds:
   '@parcel/watcher': true
+  '@scarf/scarf': false
   esbuild: true
   lmdb: true
   msgpackr-extract: true

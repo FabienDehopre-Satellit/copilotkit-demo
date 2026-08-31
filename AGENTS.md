@@ -23,18 +23,27 @@ seems arbitrary, that table is where the reasoning is.
 
 ## State of the repo
 
-**Only the Board is built.** `main` carries the pnpm workspace, the root lockfile, and `app/` — an
-Angular 22 app that renders the Seed as eight Tasks in three columns and does nothing else. There is
-no chat, no agent, no tool, and no key: nothing in the repo talks to a model yet.
+**The Board and the chat are built.** `main` carries the pnpm workspace, the root lockfile, `app/`
+— an Angular 22 app rendering the Seed as eight Tasks in three columns with `<copilot-chat>` beside
+it — and `runtime/`, a Node CopilotRuntime on 8200 running `BuiltInAgent` against OpenAI. Beat 1
+plays: type a question into the chat, get a live answer back.
 
-`pnpm-workspace.yaml` already lists all five members, but four of them are still empty names:
-`runtime/` (Node CopilotRuntime), `mcp/` (stdio team-directory server), `agent/` (a file-based C#
-app), and `slides/` (Slidev). pnpm ignores a member whose directory is absent, so `pnpm install` and
-`pnpm dev` both work today and both do only what `app/` does. Section 5 of the spec is the authority
-on what the other four become.
+Nothing past that is wired. The agent can neither read the Board nor change it, because there is no
+`connectAgentContext()` entry and no tool of any kind yet, and no `mcpClients` on the
+`BuiltInAgent`. `tools[]` on the runtime is empty and stays empty — every Board tool is a frontend
+tool, registered in Angular.
 
-So `pnpm dev` starts `ng serve` on 4200 and nothing else. A run with one name in the stream is
-correct right now, not a broken install.
+`pnpm-workspace.yaml` lists all five members, but three of them are still empty names: `mcp/`
+(stdio team-directory server), `agent/` (a file-based C# app), and `slides/` (Slidev). pnpm ignores
+a member whose directory is absent, so `pnpm install` and `pnpm dev` both work today. Section 5 of
+the spec is the authority on what the other three become.
+
+So `pnpm dev` starts `ng serve` on 4200 and the runtime on 8200. Two names in the stream is correct
+right now, not a broken install.
+
+**The runtime needs a key to start doing anything.** Copy `.env.example` to `.env` at the repo root
+and put a real `OPENAI_API_KEY` in it. There is no other configuration, and nothing is ever
+`export`ed into a shell.
 
 ## There are no automated tests, on purpose
 
