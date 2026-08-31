@@ -113,8 +113,8 @@ licence-gated and hangs in `licensePending` under `selfManagedAgents`
 
 The id is bound into `<copilot-chat [threadId]>` rather than written onto the agent
 ([#27](https://github.com/FabienDehopre-Satellit/copilotkit-demo/issues/27)). The binding is what
-CopilotKit watches, and a thread id it has not seen is what makes it clear the transcript; setting
-`agent.threadId` by hand instead is silently reverted the next time the agent instance is rebuilt.
+CopilotKit watches, and a thread id it has not seen is what makes CopilotKit clear the transcript;
+setting `agent.threadId` by hand instead is silently reverted the next time the agent instance is rebuilt.
 Binding it costs CopilotKit's welcome screen, which it hides whenever a thread id is explicit — so
 an empty chat reads the same on a fresh load as after a Reset, and the pane no longer re-lays itself
 out when the first message lands.
