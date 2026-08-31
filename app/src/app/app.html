@@ -1,10 +1,11 @@
 <header class="header">
   <h1>Onboarding portal</h1>
+  <button type="button" class="reset" (click)="reset()">Reset demo</button>
 </header>
 
 <main class="main">
   <app-board [tasks]="tasks()" />
   <aside class="chat">
-    <copilot-chat />
+    <copilot-chat [threadId]="threadId()" />
   </aside>
 </main>

@@ -23,11 +23,17 @@ seems arbitrary, that table is where the reasoning is.
 
 ## State of the repo
 
-**The Board, the chat, and the read channel are built.** `main` carries the pnpm workspace, the
-root lockfile, `app/` — an Angular 22 app rendering the Seed as eight Tasks in three columns with
-`<copilot-chat>` beside it — and `runtime/`, a Node CopilotRuntime on 8200 running `BuiltInAgent`
-against OpenAI. Beats 1 and 2 play: type a question into the chat and get a live answer back, and
-the agent answers about the Board because `App` hands it one `connectAgentContext()` entry.
+**The Board, the chat, the read channel and Reset are built.** `main` carries the pnpm workspace,
+the root lockfile, `app/` — an Angular 22 app rendering the Seed as eight Tasks in three columns
+with `<copilot-chat>` beside it — and `runtime/`, a Node CopilotRuntime on 8200 running
+`BuiltInAgent` against OpenAI. Beats 1 and 2 play: type a question into the chat and get a live
+answer back, and the agent answers about the Board because `App` hands it one
+`connectAgentContext()` entry.
+
+**Reset demo** sits in the header and does both halves: the Board signal goes back to `SEED_TASKS`
+and `threadId` takes a fresh id, bound into `<copilot-chat [threadId]>`, which is what empties the
+transcript. Section 2 of the spec is the authority on why, including what binding the thread id
+costs.
 
 The agent still cannot *change* the Board: there is no tool of any kind yet, and no `mcpClients`
 on the `BuiltInAgent`. `tools[]` on the runtime is empty and stays empty — every Board tool is a

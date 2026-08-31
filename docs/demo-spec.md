@@ -111,6 +111,14 @@ Fresh thread id, set directly. **Never mount the threads drawer**, on either bra
 licence-gated and hangs in `licensePending` under `selfManagedAgents`
 ([#12](https://github.com/FabienDehopre-Satellit/copilotkit-demo/issues/12)).
 
+The id is bound into `<copilot-chat [threadId]>` rather than written onto the agent
+([#27](https://github.com/FabienDehopre-Satellit/copilotkit-demo/issues/27)). The binding is what
+CopilotKit watches, and a thread id it has not seen is what makes it clear the transcript; setting
+`agent.threadId` by hand instead is silently reverted the next time the agent instance is rebuilt.
+Binding it costs CopilotKit's welcome screen, which it hides whenever a thread id is explicit — so
+an empty chat reads the same on a fresh load as after a Reset, and the pane no longer re-lays itself
+out when the first message lands.
+
 On-stage role of the button is **recovery only**
 ([#17](https://github.com/FabienDehopre-Satellit/copilotkit-demo/issues/17)). Beat 7 does not press
 it. See [§9](#9-the-branch-diff).
@@ -1178,6 +1186,7 @@ Every ticket that fed this document.
 | [#14](https://github.com/FabienDehopre-Satellit/copilotkit-demo/issues/14) | Board staleness within a turn, the prompt-design rule, `maxSteps >= 3` is exact |
 | [#15](https://github.com/FabienDehopre-Satellit/copilotkit-demo/issues/15) | `MapAGUIServer` drops `context`, and the 11-line fix |
 | [#17](https://github.com/FabienDehopre-Satellit/copilotkit-demo/issues/17) | Five processes, three tabs, the Runsheet, recovery, rehearsal |
+| [#27](https://github.com/FabienDehopre-Satellit/copilotkit-demo/issues/27) | Reset sets the thread id as a binding, not an agent write, and pays the welcome screen for it |
 
 Research write-ups live on their own branches under `docs/research/`:
 `angular-surface-area`, `agent-state-in-angular`, `runtime-and-mcp`, `maf-over-agui`,
