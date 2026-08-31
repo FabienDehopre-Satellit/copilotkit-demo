@@ -78,6 +78,10 @@ re-opening that argument, not just editing the code.
 Commits are Conventional Commits, lowercase subject, referencing the issue that motivated them —
 `docs: the build-ready demo spec (#11)`.
 
+Work lands via pull request, never a direct push. Branch off the target branch — `main` for
+Phase 1, `phase-2` for Phase 2 — naming the branch `<commit-type>/<slug>` to match the commit
+that lands it. Open the PR with `gh pr create` referencing the issue, and leave merging to a human.
+
 Documentation prose is dense and declarative: state the decision, then why the alternative lost.
 Match `CONTEXT.md` and the spec rather than a neutral house style.
 
