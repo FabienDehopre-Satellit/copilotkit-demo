@@ -1,3 +1,7 @@
+/* Angular defaults plus CopilotKit's stylesheet. Everything in it is scoped under
+   `[data-copilotkit]`, so it styles the chat and leaves the Board alone. */
+@import '@copilotkit/angular/styles.css';
+
 body {
   margin: 0;
   font-family: system-ui, sans-serif;

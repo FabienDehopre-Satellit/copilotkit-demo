@@ -1,6 +1,6 @@
 :host {
   display: block;
-  max-width: 1100px;
+  max-width: 1500px;
   margin: 0 auto;
   padding: 1.5rem;
 }
@@ -8,4 +8,22 @@
 h1 {
   margin: 0 0 1.25rem;
   font-size: 1.5rem;
+}
+
+/* Layout only: the chat sits beside the Board rather than under it. */
+.main {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 26rem;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+/* The chat host collapses without an explicit height. */
+.chat {
+  height: calc(100vh - 8rem);
+}
+
+.chat copilot-chat {
+  display: block;
+  height: 100%;
 }

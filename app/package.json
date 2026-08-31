@@ -15,6 +15,7 @@
     "@angular/forms": "catalog:",
     "@angular/platform-browser": "catalog:",
     "@angular/router": "catalog:",
+    "@copilotkit/angular": "catalog:",
     "rxjs": "catalog:",
     "tslib": "catalog:"
   },

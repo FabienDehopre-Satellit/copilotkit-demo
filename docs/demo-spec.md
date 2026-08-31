@@ -348,8 +348,9 @@ risk.
 
 Two things only whoever clones the repo afterwards will hit, neither exercised during the talk:
 
-- Production budget raised to `2mb` warning / `3mb` error in `angular.json`. CopilotKit's markdown
-  and highlighting dependencies blow Angular's 1 MB default.
+- Production budget raised to `4mb` warning / `5mb` error in `angular.json`. CopilotKit's markdown
+  and highlighting dependencies blow Angular's 1 MB default; the measured initial bundle with the
+  chat wired up is 3.79 MB raw, 1.36 MB transferred, so the `2mb`/`3mb` first guess did not hold.
 - The chat host needs an explicit height in its component styles or it collapses.
 
 Styling is Angular defaults plus CopilotKit's stylesheet. Nothing custom.
