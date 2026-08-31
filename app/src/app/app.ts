@@ -1,9 +1,9 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { connectAgentContext, CopilotChat } from '@copilotkit/angular';
 
 import { Board } from './board';
-import { SEED_TASKS } from './seed';
-import type { Task } from './task';
+import { BoardStore } from './board-store';
+import { registerBoardTools } from './board-tools';
 
 @Component({
   selector: 'app-root',
@@ -14,7 +14,7 @@ import type { Task } from './task';
 })
 export class App {
   /** The Board: all Tasks, in memory only. A reload is already a full reset. */
-  protected readonly tasks = signal<readonly Task[]>(SEED_TASKS);
+  protected readonly board = inject(BoardStore);
 
   /**
    * The chat thread, bound into `<copilot-chat [threadId]>` and set directly. A new id is the
@@ -31,8 +31,12 @@ export class App {
     // teardown rides DestroyRef.
     connectAgentContext(() => ({
       description: 'The current task board',
-      value: JSON.stringify(this.tasks()),
+      value: JSON.stringify(this.board.tasks()),
     }));
+
+    // The write channel: four tools, all of them frontend tools, registered from the same
+    // injection context so they are torn down with this component.
+    registerBoardTools();
   }
 
   /**
@@ -41,7 +45,7 @@ export class App {
    * so restoring the Seed without dropping the thread is not an option.
    */
   protected reset(): void {
-    this.tasks.set(SEED_TASKS);
+    this.board.reset();
     this.threadId.set(newThreadId());
   }
 }

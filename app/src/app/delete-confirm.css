@@ -1,0 +1,43 @@
+/* Loud on purpose: it is the one moment in the talk where the agent stops and asks. */
+.confirm {
+  display: grid;
+  gap: 0.5rem;
+  padding: 0.75rem 0.9rem;
+  background: #fff;
+  border: 1px solid #e03131;
+  border-radius: 8px;
+}
+
+.confirm p {
+  margin: 0;
+}
+
+.question {
+  font-weight: 600;
+}
+
+.warning,
+.outcome {
+  font-size: 0.9rem;
+}
+
+.actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.actions button {
+  padding: 0.4rem 0.8rem;
+  font-family: inherit;
+  font-size: 0.9rem;
+  background: #f1f3f5;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.actions .danger {
+  color: #fff;
+  background: #e03131;
+  border-color: #e03131;
+}
