@@ -54,12 +54,13 @@ export class DeleteConfirm implements HumanInTheLoopToolRenderer<DeleteTaskArgs>
   });
 
   constructor() {
-    // An id that is not on the board must not become a dialog nobody can usefully answer. Hand
-    // the model the same readable error the other three tools return and let it correct itself:
-    // `deleteTask` on an unknown id produces exactly that string and writes nothing.
+    // Nothing to confirm when the id is not on the board, so don't put a dialog in front of the
+    // room that has no good answer. Letting the store run is how the model finds out: `deleteTask`
+    // on an id it does not hold writes nothing and returns the same readable error the other three
+    // tools return, which is exactly what the model needs to correct itself.
     effect(() => {
-      const unresolved = this.status() === 'executing' && this.id() !== '' && !this.task();
-      if (unresolved && !untracked(this.answered)) {
+      const nothingToDelete = this.status() === 'executing' && this.id() !== '' && !this.task();
+      if (nothingToDelete) {
         this.#respond(this.#board.deleteTask(this.id()));
       }
     });
@@ -73,7 +74,11 @@ export class DeleteConfirm implements HumanInTheLoopToolRenderer<DeleteTaskArgs>
     this.#respond(`The user said no. ${this.id()} was not deleted and the board is unchanged.`);
   }
 
+  /** Once only, whichever path got here: a second answer to a question already answered is noise. */
   #respond(result: string): void {
+    if (untracked(this.answered)) {
+      return;
+    }
     this.answered.set(true);
     this.toolCall().respond(result);
   }

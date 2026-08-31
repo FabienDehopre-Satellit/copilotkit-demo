@@ -179,9 +179,9 @@ Every change to the Board goes through one of these four. Nothing else writes.
 
 | tool | signature | confirms? |
 |---|---|---|
-| `createTask` | `(title, description?, status = 'todo', assignee = null)` | no |
+| `createTask` | `(title, description?, status = 'todo', assignee?)` | no |
 | `moveTask` | `(id, status)` | no |
-| `assignTask` | `(id, assignee \| null)` | no |
+| `assignTask` | `(id, assignee?)` | no |
 | `deleteTask` | `(id)` | **yes** |
 
 `moveTask` means "move X to done" and "mark X done" hit the same tool from two phrasings.
@@ -1156,6 +1156,12 @@ same way.
 
 So an absence is an *omitted* optional string, never a null one. `assignTask`'s handler still accepts
 a literal `null` for a model that sends one anyway; it is the schema that cannot say the word.
+
+**The converter this is about is the runtime's own**, `convertJsonSchemaToZodSchema` in
+`@copilotkit/runtime`'s `agent/index`. `@copilotkit/shared` ships a same-named function that *does*
+handle `"null"`, falling back to `z.any()` with a warning — so reading the wrong one suggests this
+works. Re-check the runtime's copy on any version bump; the failure is a dead turn, not an error in
+the browser.
 
 ### `respond()` hands back an envelope, not the value
 

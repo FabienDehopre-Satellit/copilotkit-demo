@@ -25,7 +25,8 @@ const BY_ID = [
 const ID = z.string().describe('The id of an existing Task, such as T-4.');
 
 /**
- * An absent `assignee` is how "nobody owns it" crosses the wire.
+ * The `assignee` parameter's description, shared by `createTask` and `assignTask`. An absent
+ * assignee is how "nobody has it yet" crosses the wire.
  *
  * `null` would be the honest encoding and it does not survive the trip: the runtime converts every
  * incoming tool schema back into Zod through a converter that handles object, string, number,
@@ -34,7 +35,7 @@ const ID = z.string().describe('The id of an existing Task, such as T-4.');
  * detail. An optional string says the same thing in a shape the converter accepts, and the
  * handlers still take a literal `null` if a model sends one.
  */
-const UNASSIGN = 'A first name. Leave it out entirely to leave the Task with nobody on it.';
+const ASSIGNEE = 'A first name. Leave it out entirely to leave the Task with nobody on it.';
 
 /**
  * The four mutating tools. Nothing else writes to the board.
@@ -47,15 +48,14 @@ export function registerBoardTools(): void {
 
   registerFrontendTool({
     name: 'createTask',
-    description: 'Add a new Task to the board. It is given the next free id.',
+    description: 'Add a new Task to the board. It is given the next id in sequence.',
     parameters: z.object({
       title: z.string().describe('Five words or fewer: it gets read off a projector.'),
       description: z.string().optional().describe('One line on what the Task is.'),
       status: z.enum(STATUSES).optional().describe('Defaults to todo.'),
-      assignee: z.string().optional().describe(UNASSIGN),
+      assignee: z.string().optional().describe(ASSIGNEE),
     }),
-    handler: async ({ title, description, status, assignee }) =>
-      board.createTask(title, description, status, assignee),
+    handler: async (draft) => board.createTask(draft),
   });
 
   registerFrontendTool({
@@ -74,7 +74,7 @@ export function registerBoardTools(): void {
     description: `Set who a Task belongs to, or leave it with nobody on it. ${BY_ID}`,
     parameters: z.object({
       id: ID,
-      assignee: z.string().optional().describe(UNASSIGN),
+      assignee: z.string().optional().describe(ASSIGNEE),
     }),
     handler: async ({ id, assignee }) => board.assignTask(id, assignee),
   });

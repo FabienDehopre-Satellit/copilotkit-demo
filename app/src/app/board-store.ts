@@ -4,6 +4,21 @@ import { SEED_TASKS } from './seed';
 import { STATUSES, type Status, type Task } from './task';
 
 /**
+ * What `createTask` is given: a Task with no id yet, since the Board issues that. Every field but
+ * the title is optional, and §4's defaults fill the rest in.
+ *
+ * `status` is a plain `string` rather than a `Status`, and that is deliberate everywhere it
+ * appears below: these values come off the wire as raw parsed JSON, so the type the model *should*
+ * have sent is not the type that arrived. The guards are what make it one.
+ */
+export interface TaskDraft {
+  readonly title: string;
+  readonly description?: string;
+  readonly status?: string;
+  readonly assignee?: string | null;
+}
+
+/**
  * The Board, and the only thing that writes to it.
  *
  * It is a root service rather than a field on `App` because the delete confirm is rendered by
@@ -31,12 +46,8 @@ export class BoardStore {
     this.#tasks.set(SEED_TASKS);
   }
 
-  createTask(
-    title: string,
-    description: string | undefined,
-    status: Status | undefined,
-    assignee: string | null | undefined,
-  ): string {
+  createTask(draft: TaskDraft): string {
+    const { title, description, status, assignee } = draft;
     if (status !== undefined && !isStatus(status)) {
       return unknownStatus(status);
     }
@@ -55,7 +66,7 @@ export class BoardStore {
     return `Created ${task.id} "${task.title}" in ${task.status}, ${describeAssignee(task)}.`;
   }
 
-  moveTask(id: string, status: Status): string {
+  moveTask(id: string, status: string): string {
     const task = this.findTask(id);
     if (!task) {
       return this.#unknownId(id);
@@ -76,7 +87,7 @@ export class BoardStore {
     }
 
     // Leaving the assignee out unassigns, which is why there is no fifth verb for it. A literal
-    // null means the same thing, for a model that sends one — see `UNASSIGN` in board-tools.ts.
+    // null means the same thing, for a model that sends one — see `ASSIGNEE` in board-tools.ts.
     const next = { ...task, assignee: assignee ?? null };
     this.#replace(id, next);
 
@@ -103,7 +114,11 @@ export class BoardStore {
     return `No Task has id "${id}". The board holds ${ids.join(', ')}.`;
   }
 
-  /** The next free id. T-9 is beat 5's, and every one after it comes from here too. */
+  /**
+   * One past the highest id ever issued, not the lowest unused one: after beat 3 deletes T-7, the
+   * next Task is still T-9, which is what §10's board-state table expects. Reusing a deleted id
+   * would also put a familiar number on an unfamiliar Task, mid-talk.
+   */
   #nextId(): string {
     const numbers = this.#tasks()
       .map((task) => Number.parseInt(task.id.slice('T-'.length), 10))
