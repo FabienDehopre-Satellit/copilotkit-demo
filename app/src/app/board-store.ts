@@ -34,6 +34,12 @@ export class BoardStore {
   /** In memory only, no localStorage and no JSON file, so a reload is already a full reset. */
   readonly #tasks = signal<readonly Task[]>(SEED_TASKS);
 
+  /** Monotonically increasing; never decreases on delete, so ids are never reused mid-talk. */
+  #highestIssuedId = Math.max(
+    0,
+    ...SEED_TASKS.map((t) => Number.parseInt(t.id.slice('T-'.length), 10)).filter(Number.isInteger),
+  );
+
   /** All Tasks, taken together. Read by the Board component and by the one context entry. */
   readonly tasks = this.#tasks.asReadonly();
 
@@ -44,6 +50,12 @@ export class BoardStore {
   /** Half of Reset. The other half is a fresh thread id, and `App` owns that. */
   reset(): void {
     this.#tasks.set(SEED_TASKS);
+    this.#highestIssuedId = Math.max(
+      0,
+      ...SEED_TASKS.map((t) => Number.parseInt(t.id.slice('T-'.length), 10)).filter(
+        Number.isInteger,
+      ),
+    );
   }
 
   createTask(draft: TaskDraft): string {
@@ -120,10 +132,8 @@ export class BoardStore {
    * would also put a familiar number on an unfamiliar Task, mid-talk.
    */
   #nextId(): string {
-    const numbers = this.#tasks()
-      .map((task) => Number.parseInt(task.id.slice('T-'.length), 10))
-      .filter((number) => Number.isInteger(number));
-    return `T-${Math.max(0, ...numbers) + 1}`;
+    this.#highestIssuedId += 1;
+    return `T-${this.#highestIssuedId}`;
   }
 
   #replace(id: string, task: Task): void {
