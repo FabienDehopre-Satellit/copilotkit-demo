@@ -5,9 +5,34 @@
   padding: 1.5rem;
 }
 
+/* The title and the Reset demo button share the header line. */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
 h1 {
-  margin: 0 0 1.25rem;
+  margin: 0;
   font-size: 1.5rem;
+}
+
+/* Deliberately quiet: it is a recovery control, not part of the running order. */
+.reset {
+  padding: 0.4rem 0.8rem;
+  font-family: inherit;
+  font-size: 0.9rem;
+  color: #495057;
+  background: #f1f3f5;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.reset:hover {
+  background: #e9ecef;
 }
 
 /* Layout only: the chat sits beside the Board rather than under it. */
