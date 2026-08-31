@@ -1,0 +1,10 @@
+<article class="card">
+  <p class="id">{{ task().id }}</p>
+  <h3 class="title">{{ task().title }}</h3>
+  <p class="description">{{ task().description }}</p>
+  @if (task().assignee; as assignee) {
+    <p class="assignee">{{ assignee }}</p>
+  } @else {
+    <p class="assignee none">Unassigned</p>
+  }
+</article>

@@ -1,0 +1,21 @@
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  align-items: start;
+}
+
+.column {
+  display: grid;
+  gap: 0.75rem;
+  align-content: start;
+  padding: 0.9rem;
+  background: #f1f3f5;
+  border-radius: 8px;
+}
+
+.status {
+  margin: 0;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+}

@@ -1,0 +1,27 @@
+{
+  "name": "app",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "ng": "ng",
+    "dev": "ng serve",
+    "build": "ng build"
+  },
+  "dependencies": {
+    "@angular/cdk": "catalog:",
+    "@angular/common": "catalog:",
+    "@angular/compiler": "catalog:",
+    "@angular/core": "catalog:",
+    "@angular/forms": "catalog:",
+    "@angular/platform-browser": "catalog:",
+    "@angular/router": "catalog:",
+    "rxjs": "catalog:",
+    "tslib": "catalog:"
+  },
+  "devDependencies": {
+    "@angular/build": "catalog:",
+    "@angular/cli": "catalog:",
+    "@angular/compiler-cli": "catalog:",
+    "typescript": "catalog:"
+  }
+}

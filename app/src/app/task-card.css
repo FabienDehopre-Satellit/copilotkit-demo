@@ -1,0 +1,37 @@
+.card {
+  display: grid;
+  gap: 0.3rem;
+  padding: 0.75rem 0.9rem;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.card p,
+.card h3 {
+  margin: 0;
+}
+
+.id {
+  font-family: monospace;
+  font-size: 0.8rem;
+}
+
+.title {
+  font-size: 1.05rem;
+}
+
+.description {
+  font-size: 0.9rem;
+}
+
+.assignee {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+/* An absent assignee has to read as an absence, not as a name. */
+.assignee.none {
+  font-weight: 400;
+  font-style: italic;
+}

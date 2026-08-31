@@ -23,14 +23,18 @@ seems arbitrary, that table is where the reasoning is.
 
 ## State of the repo
 
-**Nothing is built yet.** As of this file, `main` carries documentation only: the glossary, the
-spec, and this file. There is no Angular app, no runtime, no workspace, and no lockfile.
+**Only the Board is built.** `main` carries the pnpm workspace, the root lockfile, and `app/` — an
+Angular 22 app that renders the Seed as eight Tasks in three columns and does nothing else. There is
+no chat, no agent, no tool, and no key: nothing in the repo talks to a model yet.
 
-The target layout is one pnpm workspace with five explicitly-listed members: `app/` (Angular 22,
-standalone, zoneless), `runtime/` (Node CopilotRuntime), `mcp/` (stdio team-directory server),
-`agent/` (a file-based C# app), and `slides/` (Slidev). Section 5 of the spec is the authority.
+`pnpm-workspace.yaml` already lists all five members, but four of them are still empty names:
+`runtime/` (Node CopilotRuntime), `mcp/` (stdio team-directory server), `agent/` (a file-based C#
+app), and `slides/` (Slidev). pnpm ignores a member whose directory is absent, so `pnpm install` and
+`pnpm dev` both work today and both do only what `app/` does. Section 5 of the spec is the authority
+on what the other four become.
 
-Don't run `pnpm dev` and conclude the repo is broken. It does not exist yet.
+So `pnpm dev` starts `ng serve` on 4200 and nothing else. A run with one name in the stream is
+correct right now, not a broken install.
 
 ## There are no automated tests, on purpose
 
