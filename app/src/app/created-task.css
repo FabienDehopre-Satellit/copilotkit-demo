@@ -1,0 +1,13 @@
+.created {
+  display: grid;
+  gap: 0.4rem;
+}
+
+/* Quiet, and above the card: the card is what the room is meant to look at. */
+.caption {
+  margin: 0;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: #495057;
+}

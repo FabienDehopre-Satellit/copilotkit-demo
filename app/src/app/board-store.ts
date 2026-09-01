@@ -154,3 +154,19 @@ function unknownStatus(value: string): string {
 function describeAssignee(task: Task): string {
   return task.assignee ? `assigned to ${task.assignee}` : 'unassigned';
 }
+
+/**
+ * The id in a `createTask` result, or undefined when the call created nothing.
+ *
+ * The Board issues the id and the tool hands back a sentence, so this is the only way the card
+ * renderer can learn which Task it is rendering: a tool call carries the arguments the model sent
+ * and the string the handler returned, and nothing else — there is no id on either. Reading the id
+ * back out here keeps the sentence and its one reader in the same file, so re-wording `createTask`
+ * cannot quietly stop the card from rendering.
+ *
+ * It fails closed. Every other string the handler can return — an unknown status, above — starts
+ * with something else, and the renderer shows those as text.
+ */
+export function createdTaskId(result: string): string | undefined {
+  return /^Created (T-\d+) /.exec(result)?.[1];
+}

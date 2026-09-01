@@ -13,3 +13,13 @@ export interface Task {
   /** A first name, or null when nobody owns it yet. Never the string 'unassigned'. */
   readonly assignee: string | null;
 }
+
+/** One group per status, in rendering order. A status holding no Tasks still gets a group. */
+export function groupByStatus(
+  tasks: readonly Task[],
+): readonly { status: Status; tasks: readonly Task[] }[] {
+  return STATUSES.map((status) => ({
+    status,
+    tasks: tasks.filter((task) => task.status === status),
+  }));
+}
