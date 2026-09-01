@@ -16,7 +16,15 @@ using OpenAI;
 
 // Before the builder: ASP.NET's environment-variable provider snapshots the environment when
 // `CreateBuilder` adds it, so a later load would leave `Configuration["OPENAI_API_KEY"]` null.
-Env.Load("../.env");
+try
+{
+    Env.Load("../.env");
+}
+catch
+{
+    Console.Error.WriteLine("No .env at the repo root. Copy .env.example to .env and put your key in it.");
+    return;
+}
 
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.UseUrls("http://localhost:8888");
@@ -24,9 +32,16 @@ builder.Services.AddAGUIServer();
 builder.Services.AddCors(o =>
     o.AddDefaultPolicy(p => p.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
 
+var apiKey = builder.Configuration["OPENAI_API_KEY"];
+if (string.IsNullOrWhiteSpace(apiKey))
+{
+    Console.Error.WriteLine("OPENAI_API_KEY is missing. Check your root .env file.");
+    return;
+}
+
 // Pinned here and, on phase 1, in the Node runtime. The two must match: beat 7 re-runs prompts
 // the room saw twenty minutes earlier, so latency is part of the demo.
-var chatClient = new OpenAIClient(builder.Configuration["OPENAI_API_KEY"])
+var chatClient = new OpenAIClient(apiKey)
     .GetChatClient("gpt-5-mini")
     .AsIChatClient();
 
