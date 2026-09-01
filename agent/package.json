@@ -1,0 +1,1 @@
+{"name": "agent", "private": true, "scripts": {"dev": "dotnet run agent.cs"}}

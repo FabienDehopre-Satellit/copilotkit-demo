@@ -23,14 +23,14 @@ seems arbitrary, that table is where the reasoning is.
 
 ## State of the repo
 
-**Every phase-1 beat is built.** `main` carries the pnpm workspace, the root lockfile, `app/` — an
+**Every beat is built, both phases.** `main` carries the pnpm workspace, the root lockfile, `app/` — an
 Angular 22 app rendering the Seed as eight Tasks in three columns with `<copilot-chat>` beside it —
 `runtime/`, a Node CopilotRuntime on 8200 running `BuiltInAgent` against OpenAI, and `mcp/`, the
 stdio Team directory the runtime spawns. Beats 1 to 6 play: type a question into the chat and get a
 live answer back, the agent answers about the Board because `App` hands it one
 `connectAgentContext()` entry, it changes the Board through the four mutating tools, a tool call
-comes back as UI, and a directory lookup chains into `assignTask` in a single turn. Only beat 7,
-which is phase 2, is left.
+comes back as UI, and a directory lookup chains into `assignTask` in a single turn. Beat 7 plays off
+the `phase-2` branch, described below.
 
 **Reset demo** sits in the header and does both halves: the Board signal goes back to `SEED_TASKS`
 and `threadId` takes a fresh id, bound into `<copilot-chat [threadId]>`, which is what empties the
@@ -65,18 +65,59 @@ without one is not a lower-priority match, it is no match at all and falls throu
 That is why all five carry a component: the wildcard is left catching exactly the two MCP tools it
 is there for, and the plain panel appears once in the talk, in beat 6.
 
-`pnpm-workspace.yaml` lists all five members, but two of them are still empty names: `agent/` (a
-file-based C# app) and `slides/` (Slidev). pnpm ignores a member whose directory is absent, so
-`pnpm install` and `pnpm dev` both work today. Section 5 of the spec is the authority on what the
-other two become.
+**Phase 2 is `agent/agent.cs` plus one changed line of Angular.** `agent.cs` is a file-based C# app
+— `dotnet run agent.cs`, .NET 10, no `.csproj`, one screen — that pins its packages inline, loads
+the same root `.env` through `DotNetEnv`, and exposes one `AsAIAgent` over AG-UI on 8888 with
+`AddAGUIServer()` and `MapAGUIServer("/", agent)`. Its system prompt is copy-pasted verbatim from
+the runtime's `BuiltInAgent` and there is no shared-file mechanism, on purpose. It registers **no
+backend tools**: the five Board tools stay in Angular and ride `RunAgentInput.tools`, which is what
+makes the swap a config change.
 
-So `pnpm dev` starts `ng serve` on 4200 and the runtime on 8200. Two names in the stream is correct
-right now, not a broken install: `mcp` has no `dev` script on purpose, because the runtime spawns
-it.
+**The eleven-line middleware in `agent.cs` is not optional and must not be tidied away.**
+`MapAGUIServer` reads `messages`, `tools` and `resume` and *drops* `context`, verified twice in
+issue #15, so without the `.AsBuilder().Use(...)` block between `AsAIAgent(...)` and `.Build()` the
+Board never reaches the model and beat 7 fails live on resolving "the profile page" to `T-4`. The
+AG-UI package version is pinned exactly for the same reason: a future preview that starts folding
+context in itself would put the Board in the prompt twice. Section 8 of the spec is the authority.
 
-**The runtime needs a key to start doing anything.** Copy `.env.example` to `.env` at the repo root
-and put a real `OPENAI_API_KEY` in it. There is no other configuration, and nothing is ever
-`export`ed into a shell.
+**`RewrapFrontendTools` and `FrontendTool` are the second load-bearing workaround, found by running
+beat 7 rather than by reading anything.** After a turn has run a frontend tool, AGUI.Server 0.0.5
+reads every later turn in the thread as a *continuation* and re-declares the not-yet-called tools
+as bare `AIFunctionDeclaration`s. A declaration is not invocable, so nothing stops on it and the
+continuation branch of the event mapping swallows the function call rather than emitting
+`TOOL_CALL` — the chat answers beat 7's first prompt and goes dead on the second. The fix presents
+each declaration as the approval-required function AGUI.Server 0.0.6 would have handed over.
+**0.0.6 itself is not an option**: it writes explicit JSON nulls where `@ag-ui/client` 0.0.57 —
+the version `@copilotkit/angular` 0.3.1 pins — expects the field absent, and its zod parse rejects
+`RUN_STARTED` outright, which kills every turn instead of the second one. Nothing here is in the
+spec; it is a preview-package bug found on the way to making the beat play. Section 8 of the spec
+now carries it too, under "The continuation fix".
+
+**`phase-2` forks from `main` and its whole diff is `app/src/app/app.config.ts`** — `runtimeUrl`
+swapped for `selfManagedAgents: { default: new HttpAgent({ url: 'http://localhost:8888/' }) }`, plus
+the `@ag-ui/client` import. One file, six lines, and that diff goes on a slide, which is why
+`@ag-ui/client` is a declared dependency of `app/` on `main` even though nothing on `main` imports
+it: earning it on the branch would make the diff three files. Nothing in `app/` calls `runAgent`
+itself — `<copilot-chat>` does it, through `copilotkit.core.runAgent({ agent })` — so if a run is
+ever kicked off by hand, it goes through `copilotkit`, never `agent.runAgent()`, which silently
+drops registered tools. Section 9 of the spec is the authority, including why an env-var toggle in
+one checkout was rejected.
+
+`pnpm-workspace.yaml` lists all five members and one of them is still an empty name: `slides/`
+(Slidev). pnpm ignores a member whose directory is absent, so `pnpm install` and `pnpm dev` both
+work today. Section 5 of the spec is the authority on what it becomes.
+
+So `pnpm dev` starts `ng serve` on 4200, the runtime on 8200 and the C# agent on 8888. Three names
+in the stream is correct, not a broken install: `mcp` has no `dev` script on purpose, because the
+runtime spawns it. **Beat 7 does not start a second agent.** The phase-2 tab is a second git
+worktree at `../copilotkit-demo-phase2` on `phase-2` running only `ng serve --port 4300`, pointed at
+the 8888 agent that `main`'s `pnpm dev` already started; the switch on stage is a browser tab.
+
+**Both tiers need a key to start doing anything.** Copy `.env.example` to `.env` at the repo root
+and put a real `OPENAI_API_KEY` in it. The runtime loads it with `process.loadEnvFile('../.env')`
+and `agent.cs` with `Env.Load("../.env")`, which has to run before `WebApplication.CreateBuilder`
+because ASP.NET's environment-variable provider snapshots the environment as it is added. There is
+no other configuration, and nothing is ever `export`ed into a shell.
 
 ## There are no automated tests, on purpose
 
