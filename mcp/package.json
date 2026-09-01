@@ -1,15 +1,13 @@
 {
-  "name": "runtime",
+  "name": "mcp",
   "version": "0.0.0",
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "tsx watch src/main.ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@ai-sdk/mcp": "catalog:",
-    "@copilotkit/runtime": "catalog:",
+    "@modelcontextprotocol/sdk": "catalog:",
     "zod": "catalog:"
   },
   "devDependencies": {

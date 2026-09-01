@@ -1,9 +1,11 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
-import { connectAgentContext, CopilotChat } from '@copilotkit/angular';
+import { connectAgentContext, CopilotChat, registerRenderToolCall } from '@copilotkit/angular';
+import { z } from 'zod';
 
 import { Board } from './board';
 import { BoardStore } from './board-store';
 import { registerBoardTools } from './board-tools';
+import { ToolCallPanel } from './tool-call-panel';
 
 @Component({
   selector: 'app-root',
@@ -37,6 +39,16 @@ export class App {
     // The write channel: four tools, all of them frontend tools, registered from the same
     // injection context so they are torn down with this component.
     registerBoardTools();
+
+    // The wildcard renderer, which is how a call the app has never heard of still comes back as
+    // UI — the MCP Team directory being the one that matters. It sits below every named
+    // registration, so the three tools with their own component keep it. The schema is `unknown`
+    // per key because that is the truth: the arguments belong to whoever defined the tool.
+    registerRenderToolCall({
+      name: '*',
+      args: z.record(z.string(), z.unknown()),
+      component: ToolCallPanel,
+    });
   }
 
   /**

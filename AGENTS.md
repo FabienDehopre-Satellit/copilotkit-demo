@@ -23,13 +23,14 @@ seems arbitrary, that table is where the reasoning is.
 
 ## State of the repo
 
-**The Board, the chat, both channels, Reset and the rendering half are built.** `main` carries the
-pnpm workspace, the root lockfile, `app/` — an Angular 22 app rendering the Seed as eight Tasks in
-three columns with `<copilot-chat>` beside it — and `runtime/`, a Node CopilotRuntime on 8200
-running `BuiltInAgent` against OpenAI. Beats 1 to 5 play: type a question into the chat and get a
+**Every phase-1 beat is built.** `main` carries the pnpm workspace, the root lockfile, `app/` — an
+Angular 22 app rendering the Seed as eight Tasks in three columns with `<copilot-chat>` beside it —
+`runtime/`, a Node CopilotRuntime on 8200 running `BuiltInAgent` against OpenAI, and `mcp/`, the
+stdio Team directory the runtime spawns. Beats 1 to 6 play: type a question into the chat and get a
 live answer back, the agent answers about the Board because `App` hands it one
-`connectAgentContext()` entry, it changes the Board through the four mutating tools, and a tool
-call comes back as UI.
+`connectAgentContext()` entry, it changes the Board through the four mutating tools, a tool call
+comes back as UI, and a directory lookup chains into `assignTask` in a single turn. Only beat 7,
+which is phase 2, is left.
 
 **Reset demo** sits in the header and does both halves: the Board signal goes back to `SEED_TASKS`
 and `threadId` takes a fresh id, bound into `<copilot-chat [threadId]>`, which is what empties the
@@ -42,21 +43,36 @@ verb and the only one that confirms, through `registerHumanInTheLoop` and the `D
 component. `tools[]` on the runtime is empty and stays empty — every Board tool is a frontend tool,
 which is what makes phase 2 a config swap rather than a port.
 
-**Three of the five put a component in the transcript**, through `component:` on their registration
-— Angular's spelling of React's `render`. Besides `DeleteConfirm` above, `createTask` renders a Task
+**All five put a component in the transcript**, through `component:` on their registration —
+Angular's spelling of React's `render`. Besides `DeleteConfirm` above, `createTask` renders a Task
 card via `CreatedTask`, unconditionally, and `showBoard` — the one rendering tool, which writes
-nothing — renders the mini three-column board via `MiniBoard`.
+nothing — renders the mini three-column board via `MiniBoard`. `moveTask` and `assignTask` share
+`ToolOutcome`, which prints the one sentence their handler already returned and nothing else.
 
-What is still missing is MCP: no wildcard `registerRenderToolCall`, and no `mcpClients` on the
-`BuiltInAgent`.
+**The Team directory is a separate process the app has never seen.** `mcp/` is a top-level member,
+not a subfolder of `runtime/`, holding a `@modelcontextprotocol/sdk` stdio server that reads
+`directory.json` and exposes two snake_case tools, `find_teammates` and `list_team`. The runtime
+spawns it at startup through `Experimental_StdioMCPTransport` wrapped in a caching
+`MCPClientProvider` in `team-directory.ts`, attached as **`mcpClients`** — never `mcpServers`, which
+is http/sse-only and silently skips anything else. Nothing about the directory is in the system
+prompt: the tool descriptions are the whole of how the agent finds it. Section 7 of the spec is the
+authority, including why the answer has to be Ines.
 
-`pnpm-workspace.yaml` lists all five members, but three of them are still empty names: `mcp/`
-(stdio team-directory server), `agent/` (a file-based C# app), and `slides/` (Slidev). pnpm ignores
-a member whose directory is absent, so `pnpm install` and `pnpm dev` both work today. Section 5 of
-the spec is the authority on what the other three become.
+**A wildcard `registerRenderToolCall({ name: '*' })` in `App` renders `ToolCallPanel`**: tool name,
+arguments, raw result, always expanded and deliberately plain. It sits below every named
+registration, and CopilotKit matches the frontend tier on `component !== undefined`, so a tool
+without one is not a lower-priority match, it is no match at all and falls through to the wildcard.
+That is why all five carry a component: the wildcard is left catching exactly the two MCP tools it
+is there for, and the plain panel appears once in the talk, in beat 6.
+
+`pnpm-workspace.yaml` lists all five members, but two of them are still empty names: `agent/` (a
+file-based C# app) and `slides/` (Slidev). pnpm ignores a member whose directory is absent, so
+`pnpm install` and `pnpm dev` both work today. Section 5 of the spec is the authority on what the
+other two become.
 
 So `pnpm dev` starts `ng serve` on 4200 and the runtime on 8200. Two names in the stream is correct
-right now, not a broken install.
+right now, not a broken install: `mcp` has no `dev` script on purpose, because the runtime spawns
+it.
 
 **The runtime needs a key to start doing anything.** Copy `.env.example` to `.env` at the repo root
 and put a real `OPENAI_API_KEY` in it. There is no other configuration, and nothing is ever

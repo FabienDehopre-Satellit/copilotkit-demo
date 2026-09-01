@@ -1,0 +1,36 @@
+/* Deliberately unstyled next to the Task card: this is the tool call, not a design for it. */
+.panel {
+  padding: 0.5rem 0.6rem;
+  background: #f1f3f5;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.name {
+  margin: 0 0 0.4rem;
+  font-family: monospace;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.label {
+  margin: 0.4rem 0 0.15rem;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: #495057;
+}
+
+.payload {
+  margin: 0;
+  padding: 0.35rem 0.4rem;
+  font-family: monospace;
+  font-size: 0.7rem;
+  line-height: 1.35;
+  /* JSON on one long line is the normal case here, and a 26rem pane cannot take it sideways. */
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  background: #fff;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+}

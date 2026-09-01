@@ -1,0 +1,6 @@
+/* One quiet line. Anything more competes with the Board changing beside it. */
+.outcome {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #495057;
+}

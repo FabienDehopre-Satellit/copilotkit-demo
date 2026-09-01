@@ -3,6 +3,8 @@ import { createServer } from 'node:http';
 import { BuiltInAgent, CopilotRuntime } from '@copilotkit/runtime/v2';
 import { createCopilotNodeListener } from '@copilotkit/runtime/v2/node';
 
+import { teamDirectory } from './team-directory.ts';
+
 // The one .env lives at the repo root and nothing reads it automatically, so both tiers
 // load it explicitly. Never `export OPENAI_API_KEY` in a shell: that is the invisible
 // prerequisite that kills a demo. A missing file gets a sentence rather than a stack,
@@ -30,11 +32,20 @@ const runtime = new CopilotRuntime({
       // Every Board tool is a frontend tool registered in Angular, which is what makes
       // phase 2 a config swap rather than a port. Nothing runs in this tier.
       tools: [],
+      // The one tier-side capability: a stdio MCP server this process spawns, owning data the app
+      // has never seen. Nothing about it is in the prompt above — its tool descriptions are how
+      // the agent finds it, which is the point of the beat.
+      mcpClients: [teamDirectory],
       // The default is 1, which lets the model emit a tool call and never see the result.
       maxSteps: 5,
     }),
   },
 });
+
+// Spawn the directory server now rather than on the first turn that needs it. The child takes a
+// moment to come up and beat 6 should not pay for that in front of the room; the cache inside
+// makes this the same connection every run then uses.
+void teamDirectory.tools();
 
 const listener = createCopilotNodeListener({
   runtime,
