@@ -43,10 +43,11 @@ verb and the only one that confirms, through `registerHumanInTheLoop` and the `D
 component. `tools[]` on the runtime is empty and stays empty — every Board tool is a frontend tool,
 which is what makes phase 2 a config swap rather than a port.
 
-**Three of the five put a component in the transcript**, through `component:` on their registration
-— Angular's spelling of React's `render`. Besides `DeleteConfirm` above, `createTask` renders a Task
+**All five put a component in the transcript**, through `component:` on their registration —
+Angular's spelling of React's `render`. Besides `DeleteConfirm` above, `createTask` renders a Task
 card via `CreatedTask`, unconditionally, and `showBoard` — the one rendering tool, which writes
-nothing — renders the mini three-column board via `MiniBoard`.
+nothing — renders the mini three-column board via `MiniBoard`. `moveTask` and `assignTask` share
+`ToolOutcome`, which prints the one sentence their handler already returned and nothing else.
 
 **The Team directory is a separate process the app has never seen.** `mcp/` is a top-level member,
 not a subfolder of `runtime/`, holding a `@modelcontextprotocol/sdk` stdio server that reads
@@ -59,8 +60,10 @@ authority, including why the answer has to be Ines.
 
 **A wildcard `registerRenderToolCall({ name: '*' })` in `App` renders `ToolCallPanel`**: tool name,
 arguments, raw result, always expanded and deliberately plain. It sits below every named
-registration, so the Task card, the mini board and the confirm dialog keep their own components —
-but it does catch `moveTask` and `assignTask`, which have none, so those now show a panel too.
+registration, and CopilotKit matches the frontend tier on `component !== undefined`, so a tool
+without one is not a lower-priority match, it is no match at all and falls through to the wildcard.
+That is why all five carry a component: the wildcard is left catching exactly the two MCP tools it
+is there for, and the plain panel appears once in the talk, in beat 6.
 
 `pnpm-workspace.yaml` lists all five members, but two of them are still empty names: `agent/` (a
 file-based C# app) and `slides/` (Slidev). pnpm ignores a member whose directory is absent, so

@@ -6,7 +6,8 @@ import { BoardStore } from './board-store';
 import { CreatedTask } from './created-task';
 import { DeleteConfirm } from './delete-confirm';
 import { MiniBoard } from './mini-board';
-import { STATUSES } from './task';
+import { STATUSES, type Status } from './task';
+import { ToolOutcome } from './tool-outcome';
 
 /**
  * Every tool addresses a Task by id, and every description that takes one ends with this.
@@ -40,6 +41,18 @@ const ID = z.string().describe('The id of an existing Task, such as T-4.');
 const ASSIGNEE = 'A first name. Leave it out entirely to leave the Task with nobody on it.';
 
 /**
+ * The arguments of the two tools that render through `ToolOutcome`, written out rather than
+ * inferred from their schemas.
+ *
+ * `ToolOutcome` ignores its arguments and so is generic over them, and a generic component is a
+ * weak inference site: left to itself the compiler takes the class's default `Record<string,
+ * unknown>` as the tool's argument type and the handler's parameters go `unknown`. Naming the type
+ * at the call fixes the tool's end and lets the component follow it.
+ */
+type MoveTaskArgs = { id: string; status: Status };
+type AssignTaskArgs = { id: string; assignee?: string };
+
+/**
  * The five tools: the four mutating ones, which are the only things that write to the board, and
  * `showBoard`, which writes nothing and only renders.
  *
@@ -63,7 +76,7 @@ export function registerBoardTools(): void {
     component: CreatedTask,
   });
 
-  registerFrontendTool({
+  registerFrontendTool<MoveTaskArgs>({
     name: 'moveTask',
     description: `Move a Task to a different status. ${BY_ID}`,
     parameters: z.object({
@@ -71,9 +84,12 @@ export function registerBoardTools(): void {
       status: z.enum(STATUSES).describe('The status to move it to.'),
     }),
     handler: async ({ id, status }) => board.moveTask(id, status),
+    // A `component` is also how a tool opts out of the wildcard, which matches on its absence.
+    // `ToolOutcome` explains what that would cost the beat it belongs to.
+    component: ToolOutcome,
   });
 
-  registerFrontendTool({
+  registerFrontendTool<AssignTaskArgs>({
     name: 'assignTask',
     // No fifth verb for unassigning: leaving the assignee out is what does it.
     description: `Set who a Task belongs to, or leave it with nobody on it. ${BY_ID}`,
@@ -82,6 +98,7 @@ export function registerBoardTools(): void {
       assignee: z.string().optional().describe(ASSIGNEE),
     }),
     handler: async ({ id, assignee }) => board.assignTask(id, assignee),
+    component: ToolOutcome,
   });
 
   // The one destructive verb, and the only tool that confirms. `registerHumanInTheLoop` is
