@@ -1,0 +1,14 @@
+<section class="mini">
+  @for (group of grouped(); track group.status) {
+    <div class="column">
+      <h4 class="status">{{ group.status }}</h4>
+      @for (task of group.tasks; track task.id) {
+        <p class="row">
+          <span class="id">{{ task.id }}</span> {{ task.title }}
+        </p>
+      } @empty {
+        <p class="row empty">empty</p>
+      }
+    </div>
+  }
+</section>

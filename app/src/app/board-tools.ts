@@ -3,7 +3,9 @@ import { registerFrontendTool, registerHumanInTheLoop } from '@copilotkit/angula
 import { z } from 'zod';
 
 import { BoardStore } from './board-store';
+import { CreatedTask } from './created-task';
 import { DeleteConfirm } from './delete-confirm';
+import { MiniBoard } from './mini-board';
 import { STATUSES } from './task';
 
 /**
@@ -38,9 +40,10 @@ const ID = z.string().describe('The id of an existing Task, such as T-4.');
 const ASSIGNEE = 'A first name. Leave it out entirely to leave the Task with nobody on it.';
 
 /**
- * The four mutating tools. Nothing else writes to the board.
+ * The five tools: the four mutating ones, which are the only things that write to the board, and
+ * `showBoard`, which writes nothing and only renders.
  *
- * All four are registered here, in Angular, and the Node runtime's `tools[]` stays empty — which
+ * All five are registered here, in Angular, and the Node runtime's `tools[]` stays empty — which
  * is what makes phase 2 a config swap rather than a port. Call this from an injection context.
  */
 export function registerBoardTools(): void {
@@ -56,6 +59,8 @@ export function registerBoardTools(): void {
       assignee: z.string().optional().describe(ASSIGNEE),
     }),
     handler: async (draft) => board.createTask(draft),
+    // Angular's `component:` is where React has `render`. Unconditional: see `CreatedTask`.
+    component: CreatedTask,
   });
 
   registerFrontendTool({
@@ -89,5 +94,20 @@ export function registerBoardTools(): void {
     description: `Remove a Task from the board for good. Call this as soon as the user asks: the app puts the confirm dialog in front of them and tells you whether they went through with it, so never ask for confirmation yourself. ${BY_ID}`,
     parameters: z.object({ id: ID }),
     component: DeleteConfirm,
+  });
+
+  // The rendering tool, and the only one of the five that changes nothing. It is registered as an
+  // ordinary frontend tool because a tool that renders is an ordinary tool — the whole point of
+  // beat 5 is that returning UI is not a separate mechanism.
+  registerFrontendTool({
+    name: 'showBoard',
+    // The last sentence is steering, and it belongs here rather than in the result: the board is
+    // on screen a beat before the reply arrives (§13), so re-listing the Tasks in prose reads as
+    // the agent describing something the room can already see.
+    description:
+      'Show the user the whole board. Call this whenever they ask to see it: it renders the three columns in the chat and changes nothing. The Tasks are then in front of them, so reply with one short sentence saying the board is on screen, and never list the Tasks yourself.',
+    parameters: z.object({}),
+    handler: async () => 'The board is on screen in the chat.',
+    component: MiniBoard,
   });
 }

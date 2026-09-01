@@ -23,26 +23,32 @@ seems arbitrary, that table is where the reasoning is.
 
 ## State of the repo
 
-**The Board, the chat, both channels and Reset are built.** `main` carries the pnpm workspace,
-the root lockfile, `app/` — an Angular 22 app rendering the Seed as eight Tasks in three columns
-with `<copilot-chat>` beside it — and `runtime/`, a Node CopilotRuntime on 8200 running
-`BuiltInAgent` against OpenAI. Beats 1 to 4 play: type a question into the chat and get a live
-answer back, the agent answers about the Board because `App` hands it one `connectAgentContext()`
-entry, and it changes the Board through the four mutating tools.
+**The Board, the chat, both channels, Reset and the rendering half are built.** `main` carries the
+pnpm workspace, the root lockfile, `app/` — an Angular 22 app rendering the Seed as eight Tasks in
+three columns with `<copilot-chat>` beside it — and `runtime/`, a Node CopilotRuntime on 8200
+running `BuiltInAgent` against OpenAI. Beats 1 to 5 play: type a question into the chat and get a
+live answer back, the agent answers about the Board because `App` hands it one
+`connectAgentContext()` entry, it changes the Board through the four mutating tools, and a tool
+call comes back as UI.
 
 **Reset demo** sits in the header and does both halves: the Board signal goes back to `SEED_TASKS`
 and `threadId` takes a fresh id, bound into `<copilot-chat [threadId]>`, which is what empties the
 transcript. Section 2 of the spec is the authority on why, including what binding the thread id
 costs.
 
-**The four mutating tools are registered in Angular**, in `board-tools.ts`, against a root
-`BoardStore` that owns the Board signal and is the only thing that writes to it. `deleteTask` is
-the one destructive verb and the only one that confirms, through `registerHumanInTheLoop` and the
-`DeleteConfirm` component. `tools[]` on the runtime is empty and stays empty — every Board tool is
-a frontend tool, which is what makes phase 2 a config swap rather than a port.
+**All five tools are registered in Angular**, in `board-tools.ts`, against a root `BoardStore` that
+owns the Board signal and is the only thing that writes to it. `deleteTask` is the one destructive
+verb and the only one that confirms, through `registerHumanInTheLoop` and the `DeleteConfirm`
+component. `tools[]` on the runtime is empty and stays empty — every Board tool is a frontend tool,
+which is what makes phase 2 a config swap rather than a port.
 
-What is still missing is the rendering half and MCP: no `component:` on any registration yet, no
-`showBoard`, no wildcard renderer, and no `mcpClients` on the `BuiltInAgent`.
+**Three of the five put a component in the transcript**, through `component:` on their registration
+— Angular's spelling of React's `render`. Besides `DeleteConfirm` above, `createTask` renders a Task
+card via `CreatedTask`, unconditionally, and `showBoard` — the one rendering tool, which writes
+nothing — renders the mini three-column board via `MiniBoard`.
+
+What is still missing is MCP: no wildcard `registerRenderToolCall`, and no `mcpClients` on the
+`BuiltInAgent`.
 
 `pnpm-workspace.yaml` lists all five members, but three of them are still empty names: `mcp/`
 (stdio team-directory server), `agent/` (a file-based C# app), and `slides/` (Slidev). pnpm ignores

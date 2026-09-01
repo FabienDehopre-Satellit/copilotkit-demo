@@ -75,7 +75,7 @@ export class BoardStore {
     };
     this.#tasks.update((tasks) => [...tasks, task]);
 
-    return `Created ${task.id} "${task.title}" in ${task.status}, ${describeAssignee(task)}.`;
+    return `${CREATED} ${task.id} "${task.title}" in ${task.status}, ${describeAssignee(task)}.`;
   }
 
   moveTask(id: string, status: string): string {
@@ -153,4 +153,24 @@ function unknownStatus(value: string): string {
 
 function describeAssignee(task: Task): string {
   return task.assignee ? `assigned to ${task.assignee}` : 'unassigned';
+}
+
+/** The word that opens a `createTask` result, and the word `createdTaskId` looks for. */
+const CREATED = 'Created';
+
+/**
+ * The id in a `createTask` result, or undefined when the call created nothing.
+ *
+ * The Board issues the id and the tool hands back a sentence, so this is the only way the card
+ * renderer can learn which Task it is rendering: a tool call carries the arguments the model sent
+ * and the string the handler returned, and nothing else — there is no id on either. So the sentence
+ * and its one reader live in the same file and open on the same shared word, which is the half of
+ * the format most likely to be re-worded.
+ *
+ * It fails closed. Every other string the handler can return — an unknown status, above — opens
+ * with something else, and the renderer shows those as text rather than drawing a card for a Task
+ * that was never created.
+ */
+export function createdTaskId(result: string): string | undefined {
+  return new RegExp(`^${CREATED} (T-\\d+) `).exec(result)?.[1];
 }

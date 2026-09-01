@@ -1,0 +1,12 @@
+@if (task(); as task) {
+  <section class="created">
+    <!-- The transcript has no columns, so the status the Task landed in has to be said. -->
+    <p class="caption">Added to {{ task.status }}</p>
+    <app-task-card [task]="task" />
+  </section>
+} @else if (status() === 'complete') {
+  <!-- Nothing was created: the handler returned an error the model can correct itself from. -->
+  <p class="outcome">{{ result() }}</p>
+} @else {
+  <p class="caption">Adding a Task…</p>
+}
