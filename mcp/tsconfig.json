@@ -7,8 +7,6 @@
     "types": ["node"],
     "strict": true,
     "verbatimModuleSyntax": true,
-    /* Imports name the `.ts` file that is actually there, since nothing is emitted. */
-    "allowImportingTsExtensions": true,
     "skipLibCheck": true,
     /* Nothing here is built. `tsx` runs the source and `tsc` only type-checks. */
     "noEmit": true

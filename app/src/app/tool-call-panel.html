@@ -1,0 +1,14 @@
+<section class="panel">
+  <p class="name">{{ name() }}</p>
+
+  <p class="label">Arguments</p>
+  <pre class="payload">{{ argsJson() }}</pre>
+
+  @if (done()) {
+    <p class="label">Result</p>
+    <pre class="payload">{{ result() }}</pre>
+  } @else {
+    <!-- The call is out and nothing has come back yet. -->
+    <p class="label">Running…</p>
+  }
+</section>

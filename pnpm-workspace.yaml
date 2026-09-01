@@ -8,6 +8,7 @@ packages:
 # Every version is pinned exactly, no ranges. `ng new` and `ng add` write carets and know
 # nothing about catalogs, so scaffold first and hoist the resolved versions here by hand.
 catalog:
+  '@ai-sdk/mcp': 1.0.77
   '@angular/build': 22.1.6
   '@angular/cdk': 22.1.4
   '@angular/cli': 22.1.6
@@ -20,6 +21,7 @@ catalog:
   '@angular/router': 22.1.4
   '@copilotkit/angular': 0.3.1
   '@copilotkit/runtime': 1.66.0
+  '@modelcontextprotocol/sdk': 1.30.0
   '@types/node': 24.13.3
   prettier: 3.9.6
   rxjs: 7.8.2
