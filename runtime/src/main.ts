@@ -1,6 +1,8 @@
 import { createServer } from 'node:http';
 
-import { BuiltInAgent, CopilotRuntime } from '@copilotkit/runtime/v2';
+import { createMCPClient } from '@ai-sdk/mcp';
+import { Experimental_StdioMCPTransport } from '@ai-sdk/mcp/mcp-stdio';
+import { BuiltInAgent, CopilotRuntime, type MCPClientProvider } from '@copilotkit/runtime/v2';
 import { createCopilotNodeListener } from '@copilotkit/runtime/v2/node';
 
 // The one .env lives at the repo root and nothing reads it automatically, so both tiers
@@ -13,6 +15,21 @@ try {
   console.error('No .env at the repo root. Copy .env.example to .env and put your key in it.');
   process.exit(1);
 }
+
+// The runtime owns the stdio child. The AI SDK client discovers its tools once here, while the
+// provider hands the same ToolSet to CopilotKit on every run. Calling directoryClient.tools()
+// inside the provider would repeat MCP discovery for every chat turn.
+const directoryClient = await createMCPClient({
+  transport: new Experimental_StdioMCPTransport({
+    command: 'pnpm',
+    args: ['--filter', 'mcp', 'exec', 'tsx', 'src/main.ts'],
+    cwd: '..',
+  }),
+});
+const directoryTools = await directoryClient.tools();
+const directoryProvider: MCPClientProvider = {
+  tools: async () => directoryTools,
+};
 
 const runtime = new CopilotRuntime({
   agents: {
@@ -30,6 +47,9 @@ const runtime = new CopilotRuntime({
       // Every Board tool is a frontend tool registered in Angular, which is what makes
       // phase 2 a config swap rather than a port. Nothing runs in this tier.
       tools: [],
+      // The Team directory stays outside the app. Its snake_case tools arrive over stdio and
+      // remain visually distinct from Angular's camelCase Board tools in the transcript.
+      mcpClients: [directoryProvider],
       // The default is 1, which lets the model emit a tool call and never see the result.
       maxSteps: 5,
     }),

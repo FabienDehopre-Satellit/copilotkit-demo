@@ -1,0 +1,32 @@
+[
+  {
+    "name": "Amira",
+    "team": "Product Design",
+    "skills": "product design, UX writing"
+  },
+  {
+    "name": "Bruno",
+    "team": "Platform",
+    "skills": "infrastructure, CI/CD, deployments"
+  },
+  {
+    "name": "Chloé",
+    "team": "Frontend",
+    "skills": "Angular, design systems"
+  },
+  {
+    "name": "Dries",
+    "team": "Security",
+    "skills": "identity, SSO, access reviews"
+  },
+  {
+    "name": "Ines",
+    "team": "Data Platform",
+    "skills": "data pipelines, ETL, systems integration"
+  },
+  {
+    "name": "Youssef",
+    "team": "Legal & Procurement",
+    "skills": "vendor contracts, purchasing"
+  }
+]

@@ -23,13 +23,14 @@ seems arbitrary, that table is where the reasoning is.
 
 ## State of the repo
 
-**The Board, the chat, both channels, Reset and the rendering half are built.** `main` carries the
+**The Board, the chat, both channels, Reset, rendering and MCP are built.** `main` carries the
 pnpm workspace, the root lockfile, `app/` — an Angular 22 app rendering the Seed as eight Tasks in
 three columns with `<copilot-chat>` beside it — and `runtime/`, a Node CopilotRuntime on 8200
 running `BuiltInAgent` against OpenAI. Beats 1 to 5 play: type a question into the chat and get a
 live answer back, the agent answers about the Board because `App` hands it one
 `connectAgentContext()` entry, it changes the Board through the four mutating tools, and a tool
-call comes back as UI.
+call comes back as UI. Beat 6 also plays: the runtime spawns the stdio Team directory, the agent
+finds Ines through MCP, and it assigns her to T-2 through the existing frontend tool.
 
 **Reset demo** sits in the header and does both halves: the Board signal goes back to `SEED_TASKS`
 and `threadId` takes a fresh id, bound into `<copilot-chat [threadId]>`, which is what empties the
@@ -47,13 +48,13 @@ which is what makes phase 2 a config swap rather than a port.
 card via `CreatedTask`, unconditionally, and `showBoard` — the one rendering tool, which writes
 nothing — renders the mini three-column board via `MiniBoard`.
 
-What is still missing is MCP: no wildcard `registerRenderToolCall`, and no `mcpClients` on the
-`BuiltInAgent`.
+The runtime attaches the Team directory through a caching `MCPClientProvider` in `mcpClients`.
+`mcp/` owns the six Teammates in `directory.json` and exposes `find_teammates` and `list_team`.
+Angular's wildcard `registerRenderToolCall` shows those calls as plain, always-expanded panels.
 
-`pnpm-workspace.yaml` lists all five members, but three of them are still empty names: `mcp/`
-(stdio team-directory server), `agent/` (a file-based C# app), and `slides/` (Slidev). pnpm ignores
-a member whose directory is absent, so `pnpm install` and `pnpm dev` both work today. Section 5 of
-the spec is the authority on what the other three become.
+`pnpm-workspace.yaml` lists all five members, but two are still empty names: `agent/` (a file-based
+C# app) and `slides/` (Slidev). pnpm ignores a member whose directory is absent, so `pnpm install`
+and `pnpm dev` both work today. Section 5 of the spec is the authority on what those two become.
 
 So `pnpm dev` starts `ng serve` on 4200 and the runtime on 8200. Two names in the stream is correct
 right now, not a broken install.

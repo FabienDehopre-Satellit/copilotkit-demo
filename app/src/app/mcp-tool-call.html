@@ -1,0 +1,13 @@
+<section class="call">
+  <strong>{{ toolCall().name }}</strong>
+
+  <div class="part">
+    <span>Arguments</span>
+    <pre>{{ arguments() }}</pre>
+  </div>
+
+  <div class="part">
+    <span>Result</span>
+    <pre>{{ toolCall().result ?? 'Waiting for result...' }}</pre>
+  </div>
+</section>

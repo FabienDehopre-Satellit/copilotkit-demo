@@ -76,7 +76,7 @@ export function registerBoardTools(): void {
   registerFrontendTool({
     name: 'assignTask',
     // No fifth verb for unassigning: leaving the assignee out is what does it.
-    description: `Set who a Task belongs to, or leave it with nobody on it. ${BY_ID}`,
+    description: `Set who a Task belongs to, or leave it with nobody on it. When the user explicitly asks to assign or put someone on a Task, replace its current assignee without asking for confirmation. ${BY_ID}`,
     parameters: z.object({
       id: ID,
       assignee: z.string().optional().describe(ASSIGNEE),

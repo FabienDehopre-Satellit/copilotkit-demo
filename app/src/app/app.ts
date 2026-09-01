@@ -1,9 +1,11 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
-import { connectAgentContext, CopilotChat } from '@copilotkit/angular';
+import { connectAgentContext, CopilotChat, registerRenderToolCall } from '@copilotkit/angular';
+import { z } from 'zod';
 
 import { Board } from './board';
 import { BoardStore } from './board-store';
 import { registerBoardTools } from './board-tools';
+import { McpToolCall } from './mcp-tool-call';
 
 @Component({
   selector: 'app-root',
@@ -37,6 +39,15 @@ export class App {
     // The write channel: four tools, all of them frontend tools, registered from the same
     // injection context so they are torn down with this component.
     registerBoardTools();
+
+    // The fallback for tools the app did not define. Named registrations win over `*`, so the
+    // Task card, delete confirm and mini Board keep their purpose-built renderers while MCP calls
+    // get this plain panel without Angular knowing which Team directory tools exist.
+    registerRenderToolCall({
+      name: '*',
+      args: z.record(z.unknown()),
+      component: McpToolCall,
+    });
   }
 
   /**

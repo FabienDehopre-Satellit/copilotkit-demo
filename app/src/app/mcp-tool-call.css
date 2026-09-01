@@ -1,0 +1,29 @@
+:host {
+  display: block;
+}
+
+.call {
+  padding: 0.75rem;
+  color: #343a40;
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+}
+
+.part {
+  margin-top: 0.6rem;
+}
+
+span {
+  display: block;
+  margin-bottom: 0.2rem;
+  font-size: 0.75rem;
+  color: #6c757d;
+}
+
+pre {
+  margin: 0;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+  font: 0.75rem/1.35 monospace;
+}
