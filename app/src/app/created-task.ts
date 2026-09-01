@@ -2,8 +2,8 @@ import { ChangeDetectionStrategy, Component, computed, inject, input } from '@an
 import type { AngularToolCall, ToolRenderer } from '@copilotkit/angular';
 
 import { BoardStore, createdTaskId } from './board-store';
-import { TaskCard } from './task-card';
 import type { Status } from './task';
+import { TaskCard } from './task-card';
 
 /** `createTask`'s arguments. A type alias, not an interface, so it satisfies the constraint. */
 export type CreateTaskArgs = {
@@ -23,7 +23,9 @@ export type CreateTaskArgs = {
  *
  * The card reads the live Task out of the store rather than redrawing the arguments, so what the
  * room sees in the transcript is the Task that is on the Board beside it, not a copy that could
- * disagree with it.
+ * disagree. The arguments are not a fallback for a Task the store cannot produce: they are the same
+ * whether the Task was created or the status was rejected, so drawing a card from them would put
+ * one in front of the room for a Task that does not exist.
  */
 @Component({
   selector: 'app-created-task',

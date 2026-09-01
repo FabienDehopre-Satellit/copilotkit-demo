@@ -101,12 +101,13 @@ export function registerBoardTools(): void {
   // beat 5 is that returning UI is not a separate mechanism.
   registerFrontendTool({
     name: 'showBoard',
+    // The last sentence is steering, and it belongs here rather than in the result: the board is
+    // on screen a beat before the reply arrives (§13), so re-listing the Tasks in prose reads as
+    // the agent describing something the room can already see.
     description:
-      'Show the user the whole board. Call this whenever they ask to see it. It renders the three columns in the chat and changes nothing.',
+      'Show the user the whole board. Call this whenever they ask to see it: it renders the three columns in the chat and changes nothing. The Tasks are then in front of them, so reply with one short sentence saying the board is on screen, and never list the Tasks yourself.',
     parameters: z.object({}),
-    // The board is on screen a beat before this sentence arrives (§13), so re-listing the Tasks in
-    // prose reads as the agent describing something the room can already see.
-    handler: async () => 'The board is displayed above. Say so in one line and list nothing.',
+    handler: async () => 'The board is on screen in the chat.',
     component: MiniBoard,
   });
 }

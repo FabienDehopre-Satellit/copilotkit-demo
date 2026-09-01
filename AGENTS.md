@@ -42,9 +42,10 @@ verb and the only one that confirms, through `registerHumanInTheLoop` and the `D
 component. `tools[]` on the runtime is empty and stays empty — every Board tool is a frontend tool,
 which is what makes phase 2 a config swap rather than a port.
 
-**Two tools return UI**, through `component:` on their registration — Angular's spelling of React's
-`render`. `createTask` renders a Task card via `CreatedTask`, unconditionally, and `showBoard` — the
-one rendering tool, which writes nothing — renders the mini three-column board via `MiniBoard`.
+**Three of the five put a component in the transcript**, through `component:` on their registration
+— Angular's spelling of React's `render`. Besides `DeleteConfirm` above, `createTask` renders a Task
+card via `CreatedTask`, unconditionally, and `showBoard` — the one rendering tool, which writes
+nothing — renders the mini three-column board via `MiniBoard`.
 
 What is still missing is MCP: no wildcard `registerRenderToolCall`, and no `mcpClients` on the
 `BuiltInAgent`.

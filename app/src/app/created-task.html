@@ -6,7 +6,7 @@
   </section>
 } @else if (status() === 'complete') {
   <!-- Nothing was created: the handler returned an error the model can correct itself from. -->
-  <p class="caption">{{ result() }}</p>
+  <p class="outcome">{{ result() }}</p>
 } @else {
   <p class="caption">Adding a Task…</p>
 }
