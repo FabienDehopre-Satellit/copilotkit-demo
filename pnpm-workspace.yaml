@@ -23,7 +23,10 @@ catalog:
   '@copilotkit/angular': 0.3.1
   '@copilotkit/runtime': 1.66.0
   '@modelcontextprotocol/sdk': 1.30.0
+  '@slidev/cli': 52.19.1
+  '@slidev/theme-default': 0.25.0
   '@types/node': 24.13.3
+  playwright-chromium: 1.62.1
   prettier: 3.9.6
   rxjs: 7.8.2
   tslib: 2.8.1
@@ -34,10 +37,13 @@ catalog:
 # Angular's toolchain. esbuild ships the bundler binary, the other three back the build cache.
 # Left unanswered, pnpm refuses to run their install scripts and `ng build` exits 1.
 # `@scarf/scarf` is CopilotKit's install-time analytics ping, answered `false` on the same
-# grounds: left unanswered it warns on every install.
+# grounds: left unanswered it warns on every install. `playwright-chromium` is the browser
+# `slidev export` drives, answered `true` so it lands at install time rather than as a surprise
+# download the night before the talk.
 allowBuilds:
   '@parcel/watcher': true
   '@scarf/scarf': false
   esbuild: true
   lmdb: true
   msgpackr-extract: true
+  playwright-chromium: true

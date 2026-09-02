@@ -1,0 +1,17 @@
+{
+  "name": "slides",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "present": "slidev --port 3030",
+    "export": "slidev export --output deck.pdf"
+  },
+  "dependencies": {
+    "@slidev/cli": "catalog:",
+    "@slidev/theme-default": "catalog:"
+  },
+  "devDependencies": {
+    "playwright-chromium": "catalog:"
+  }
+}
