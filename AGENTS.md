@@ -11,7 +11,7 @@ in a normal product repo.
 |---|---|---|
 | [`CONTEXT.md`](./CONTEXT.md) | The glossary. Binding on code, UI copy, on-stage prompts, and slides. | Always, before writing anything. |
 | [`docs/demo-spec.md`](./docs/demo-spec.md) | The build-ready spec. Self-contained: build from it without opening an issue. | Before any implementation work. |
-| `docs/runsheet.md` | What to start, check, and do when it breaks on the day. Not written yet — it is a deliverable of the build, specified in section 12. | When changing anything about how the demo is run. |
+| [`docs/runsheet.md`](./docs/runsheet.md) | What to start, check, and do when it breaks on the day. Written, per section 12. | When changing anything about how the demo is run. |
 
 `CONTEXT.md` is not a suggestion. If a term in it has a synonym you were about to use, use the
 term in `CONTEXT.md` instead. The most commonly broken ones: a `status` is never a *column* or a
@@ -103,9 +103,19 @@ ever kicked off by hand, it goes through `copilotkit`, never `agent.runAgent()`,
 drops registered tools. Section 9 of the spec is the authority, including why an env-var toggle in
 one checkout was rejected.
 
+**`docs/runsheet.md` is written, and on any question of what the machine does on the day it beats
+the spec.** The spec predicted `pnpm dev` would print four names; it prints three, and section 5
+and section 12 were corrected rather than the Runsheet written to match them. Everywhere else the
+spec stays the authority, section by section, as the rest of this file says. The Runsheet carries
+the five processes, the three-tab window, the running order with every pinned prompt, the
+night-before and at-the-door lists, recovery, and rehearsal. It copies the pinned prompts out of
+section 10 on purpose — you cannot present from a document that sends you to another file for the
+words you are typing — so a prompt reworded in rehearsal has to be changed in both.
+
 `pnpm-workspace.yaml` lists all five members and one of them is still an empty name: `slides/`
 (Slidev). pnpm ignores a member whose directory is absent, so `pnpm install` and `pnpm dev` both
-work today. Section 5 of the spec is the authority on what it becomes.
+work today. Section 5 of the spec is the authority on what it becomes, and the Runsheet already
+assumes it exists: `pnpm present` on 3030 and `slides/deck.pdf` as the only fallback.
 
 So `pnpm dev` starts `ng serve` on 4200, the runtime on 8200 and the C# agent on 8888. Three names
 in the stream is correct, not a broken install: `mcp` has no `dev` script on purpose, because the
