@@ -110,7 +110,8 @@ spec stays the authority, section by section, as the rest of this file says. The
 the five processes, the three-tab window, the running order with every pinned prompt, the
 night-before and at-the-door lists, recovery, and rehearsal. It copies the pinned prompts out of
 section 10 on purpose — you cannot present from a document that sends you to another file for the
-words you are typing — so a prompt reworded in rehearsal has to be changed in both.
+words you are typing — and the Deck's presenter notes copy them a third time, so a prompt reworded
+in rehearsal has to be changed in all three.
 
 **The root `README.md` is written and is the only one — no per-folder READMEs.** Its reader is
 whoever clones the repo after the talk, which is nobody the Runsheet or the Deck is for. It carries
@@ -119,10 +120,41 @@ on running both phases at once, which is the second place in this repo where one
 written twice, so the worktree, 4300 and the 8888 collision have to be changed in both. Section 5 of
 the spec is the authority on what it carries.
 
-`pnpm-workspace.yaml` lists all five members and one of them is still an empty name: `slides/`
-(Slidev). pnpm ignores a member whose directory is absent, so `pnpm install` and `pnpm dev` both
-work today. Section 5 of the spec is the authority on what it becomes, and the Runsheet already
-assumes it exists: `pnpm present` on 3030 and `slides/deck.pdf` as the only fallback.
+**The Deck is written: `slides/`, a Slidev project, nineteen slides, default theme, English.** Its
+script is `present`, not `dev`, so `pnpm dev` still prints three names. Both of its scripts are run
+from inside `slides/`: `pnpm present` serves it on 3030, and `pnpm export` writes `slides/deck.pdf`,
+which is committed and is the deck's only fallback. `playwright-chromium` is a declared dependency
+and `allowBuilds` answers it `true`, so the browser `slidev export` drives arrives at install time
+rather than as a surprise download the night before — the cost is that everyone who clones the repo
+downloads a Chromium they will never run. Section 11 of the spec is the authority on the outline;
+the Runsheet owns when the export is re-run.
+
+**Trace 1 is a real capture and the thing that captured it is gone.** Beat 1's prompt was run against
+the runtime with a throwaway `console.log` in `runtime/src/main.ts` — inside a `fetch` wrapper, which
+is the only place the Responses-API request exists — and both the wrapper and the log were deleted in
+the same sitting. No debug flag, no env-gated logger. The turn it captures is the frontend slide 2
+describes, chat wiring and nothing else, with no `context` and no `tools` of its own: slide 4's
+annotation is what is *missing* from the request, and the running app sends the Board on every turn,
+beat 1's included. Slide 4 says so in a footnote rather than hiding it in a presenter note, because
+the request did still carry the two Team directory tools the runtime attaches unconditionally. Trace
+2 is hand-built in the same vocabulary — `input`, `developer`, `function_call`,
+`function_call_output` — checked against a real beat-3 turn rather than invented.
+
+**The Deck copies code out of the repo and nothing keeps the two in step.** Slides 2, 9, 10, 12, 15,
+16 and 17 carry pasted snippets of `app.config.ts`, `app.ts`, `board-tools.ts`, the branch diff and
+`agent.cs`. Its presenter notes carry all eleven pinned prompts too. So a prompt reworded in
+rehearsal now has to change in three places — section 10 of the spec, the Runsheet, and
+`slides/slides.md` — and the deck has to be re-exported; a changed source file has to be carried into
+`slides/slides.md` by hand. That is the price of the deck being the room's only view of the code, and
+it is paid on purpose.
+
+**Slide 16 does not show `agent.cs` in full, and the ticket asked for that.** The file runs to about
+120 lines. It is two columns — the wiring on the left, the continuation fix on the right — with the
+comments stripped, the eight `using` lines and the two startup guards elided behind visible `…`
+markers, and the context-folding lambda deferred to slide 17, which zooms it. A footnote on the slide
+says exactly that. Section 1 of the spec is why: legibility from the back of the room beats
+completeness, and one column of 120 lines is not legible. Section 11's "`agent.cs` in full
+(~31 lines)" predates issue #29 doubling the file, and is corrected there.
 
 So `pnpm dev` starts `ng serve` on 4200, the runtime on 8200 and the C# agent on 8888. Three names
 in the stream is correct, not a broken install: `mcp` has no `dev` script on purpose, because the

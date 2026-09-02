@@ -21,8 +21,7 @@ after a run-through.
 
 **Three names in the parallel stream — `app`, `runtime`, `agent` — and that is correct, not a broken
 install.** `mcp` has no `dev` script because the runtime spawns it, and `slides` has `present`
-instead of `dev`, so `--if-present` skips both — and until the deck is built, pnpm skips `slides`
-for the simpler reason that the directory is not there yet.
+instead of `dev`, so `--if-present` skips both.
 
 **The phase-2 worktree never runs `pnpm dev`.** `agent/`, `runtime/` and `mcp/` are byte-identical on
 both branches, so a second `pnpm dev` would only fail to bind 8200 and 8888 — loudly, inside a
@@ -71,7 +70,9 @@ Seven beats, ~65 minutes, no hard cap. The prompts are pinned: type them as writ
 wording is what makes each beat land, and they are copied here rather than linked because a
 document you present from cannot send you to another file for the words you are about to type.
 [§10](./demo-spec.md#10-the-beats) is still where a prompt is *decided* — rehearsal changes wording
-(see below), and a change made there has to land in this table too.
+(see below), and a change made there has to land in this table **and** in the Deck's presenter
+notes, `slides/slides.md`, which copy them a third time for the same reason. Then re-export
+`deck.pdf`.
 
 | beat | tab | prompt | what should happen | clock |
 |---|---|---|---|---|
@@ -99,9 +100,11 @@ a correction rather than an arbitrary move.
 
 ## Night before
 
-1. Capture Trace 1 and finish the Deck. Trace 1 comes from a real beat-1 turn, via a throwaway
-   `console.log` in `runtime/src/main.ts` that is deleted again immediately.
-2. `slidev export` to `slides/deck.pdf`, and **commit it**. It is the Deck's only fallback.
+1. Finish the Deck. Trace 1 on slide 4 is already captured and does not need re-taking; if it ever
+   does, it comes from a real beat-1 turn via a throwaway `console.log` in `runtime/src/main.ts` that
+   is deleted again immediately.
+2. `pnpm export` in `slides/`, which writes `slides/deck.pdf`, and **commit it**. It is the Deck's
+   only fallback, and it is stale the moment a slide changes.
 3. Rebase `phase-2` onto `main`.
 4. `git diff main phase-2 --stat` shows **exactly one file**, `app/src/app/app.config.ts`, six lines.
    This is a check, not a vibe: that diff is on slide 15 and is only true if nothing drifted.
@@ -116,7 +119,7 @@ breaks.
 
 1. `pnpm dev` in the main worktree. Wait for all three names in the stream.
 2. `ng serve --port 4300` in the phase-2 worktree, from `app/`.
-3. `pnpm present` in `slides/`.
+3. `pnpm present` in `slides/`. It serves on 3030 and starts nothing else.
 4. One throwaway prompt into 4200, **and one into 4300**.
 5. Hard-reload both app tabs. The Board is in memory, so this is a complete reset to the Seed with an
    empty transcript.

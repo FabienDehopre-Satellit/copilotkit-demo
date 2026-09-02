@@ -1,0 +1,4 @@
+# The Deck is laid out by hand against a projector: the two traces, the branch diff and the two
+# columns of `agent.cs` are wrapped to fit a slide, and Prettier would reflow all of them. Slidev
+# markdown is also Vue-compiled, so `<v-click>` and `<v-switch>` blocks are not ordinary Markdown.
+slides/slides.md

@@ -988,7 +988,18 @@ Trace 2 must match, or the two slides will not read as the same system.
 
 Capture trace 1 with a **throwaway `console.log`** in `runtime/src/main.ts`, run once, then delete it.
 Not a debug flag and not an env-gated logger. Nothing about producing a slide asset should survive
-into a repo people clone.
+into a repo people clone. In practice the log has to sit inside a `fetch` wrapper, because the
+Responses-API request exists nowhere else in the tier; the wrapper is thrown away with it.
+
+**Corrected in [#31](https://github.com/FabienDehopre-Satellit/copilotkit-demo/issues/31), by taking
+the capture.** "Captured from beat 1" cannot mean the request the running app sends at beat 1: that
+one carries the Board as context and all five Board tools, so its trace would contain exactly what
+slide 4 exists to show is absent. The captured turn is beat 1's prompt against the frontend of
+**slide 2** — the chat wiring and nothing else, no `context` and no `tools`. It is still a real
+request, really served by `runtime/src/main.ts`, really answered by `gpt-5-mini`. It does carry the
+two Team directory tools the runtime attaches to every turn regardless, so slide 4 cuts them from the
+paste and says so in a footnote on the slide rather than in a presenter note. A trace with a quiet
+elision in it is worse than one that names its own.
 
 ### The outline
 
@@ -1011,7 +1022,7 @@ Nineteen slides.
 | 13 | Beat 6, "reaching outside the app: MCP" (title card) | |
 | 14 | Architecture, three builds on one slide: Node tier present, gone, back in front in production. AG-UI defined here. Carries the browser-direct caveat and *MCP moves to MAF* | phase 2, ~14 min |
 | 15 | The diff: six lines of `app.config.ts` at full size, plus the folders-are-still-there clause | |
-| 16 | `agent.cs` in full (~31 lines) | |
+| 16 | `agent.cs`, two columns: the wiring and the continuation fix | |
 | 17 | The context-folding lambda zoomed (~11 lines): the step phase 1's Node agent was doing invisibly | |
 | 18 | Taking this further: `AIFunctionFactory.Create`, `user-secrets`, licensing, MCP into MAF | close |
 | 19 | Resources: QR to the repo, CopilotKit Angular docs, Microsoft's AG-UI sample, the `dotnet run app.cs` announcement | |
@@ -1023,6 +1034,16 @@ what did *you* write". Beats 4 and 6 introduce no new Angular API, so they stay 
 **Architecture is one slide with three builds, not three slides.** Builds keep the boxes in fixed
 positions, so the Node tier visibly vanishes rather than the picture being redrawn. That is the one
 thing the slide must land.
+
+**Slide 16 is not `agent.cs` in full, and the "~31 lines" above is stale.** That figure predates
+[#29](https://github.com/FabienDehopre-Satellit/copilotkit-demo/issues/29), which took the file to
+about 120 lines by adding the continuation fix; [§8](#8-phase-2-the-maf-agent) already records the
+new size. One column of 120 lines is not legible from the back of the room, and
+[§1](#governing-build-criterion) says legibility wins. So the slide is two columns — the wiring left,
+the continuation fix right — with the comments stripped, the `using` block and the two startup guards
+elided behind visible `…` markers, and the context-folding lambda deferred to slide 17, which zooms
+it. The elisions are named in a footnote on the slide. Do not try to win the missing lines back by
+shrinking the type further; it is already the smallest thing in the deck.
 
 Structural choices worth not relitigating:
 

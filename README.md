@@ -110,5 +110,7 @@ the file you open is the file that is running.
   and section 15 indexes each one back to the issue that settled it.
 - [`docs/runsheet.md`](./docs/runsheet.md) — what to start, check, and do when it breaks on the day.
   Written for whoever is giving the talk, not for whoever cloned it.
+- [`slides/slides.md`](./slides/slides.md) — the Deck the room saw, nineteen Slidev slides, with the
+  spoken notes under each one. `slides/deck.pdf` is the same thing without a Node process.
 
 There are no automated tests, on purpose. Verification is running the demo.
