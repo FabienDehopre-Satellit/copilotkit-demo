@@ -112,6 +112,13 @@ night-before and at-the-door lists, recovery, and rehearsal. It copies the pinne
 section 10 on purpose — you cannot present from a document that sends you to another file for the
 words you are typing — so a prompt reworded in rehearsal has to be changed in both.
 
+**The root `README.md` is written, for whoever clones the repo after the talk.** One README, no
+per-folder ones. It carries what the demo is, the two-branch map, the prerequisites, the run story
+per phase, how to run both phases at once — the second worktree on 4300, and why the agent starts
+only once — and a five-file "what to look at" list. It carries no beats and no pinned prompts: those
+belong to the spec and the Deck, and a fourth copy of them is a fourth thing to keep in step.
+Section 5 of the spec is the authority.
+
 `pnpm-workspace.yaml` lists all five members and one of them is still an empty name: `slides/`
 (Slidev). pnpm ignores a member whose directory is absent, so `pnpm install` and `pnpm dev` both
 work today. Section 5 of the spec is the authority on what it becomes, and the Runsheet already
