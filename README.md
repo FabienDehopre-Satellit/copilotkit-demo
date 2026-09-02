@@ -31,9 +31,10 @@ pnpm install
 cp .env.example .env      # then put a real OPENAI_API_KEY in it
 ```
 
-The key goes in `.env` at the repo root, and nowhere else. Both tiers load that file explicitly —
-`process.loadEnvFile('../.env')` in the runtime, `Env.Load("../.env")` in `agent.cs` — so setting the
-variable in your shell instead is not equivalent and will not be picked up.
+The key goes in `.env` at the repo root, and nowhere else. Nothing reads a root `.env`
+automatically, so both tiers load it explicitly — `process.loadEnvFile('../.env')` in the runtime,
+`Env.Load("../.env")` in `agent.cs` — and both exit with a one-line message when the file is not
+there. Exporting the variable in your shell instead of writing the file starts neither of them.
 
 ## Running Phase 1
 
