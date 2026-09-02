@@ -11,7 +11,7 @@ in a normal product repo.
 |---|---|---|
 | [`CONTEXT.md`](./CONTEXT.md) | The glossary. Binding on code, UI copy, on-stage prompts, and slides. | Always, before writing anything. |
 | [`docs/demo-spec.md`](./docs/demo-spec.md) | The build-ready spec. Self-contained: build from it without opening an issue. | Before any implementation work. |
-| [`docs/runsheet.md`](./docs/runsheet.md) | What to start, check, and do when it breaks on the day. Written, per section 12. It is the day-of authority: when it and the spec disagree about what the machine does, the Runsheet wins. | When changing anything about how the demo is run. |
+| [`docs/runsheet.md`](./docs/runsheet.md) | What to start, check, and do when it breaks on the day. Written, per section 12. | When changing anything about how the demo is run. |
 
 `CONTEXT.md` is not a suggestion. If a term in it has a synonym you were about to use, use the
 term in `CONTEXT.md` instead. The most commonly broken ones: a `status` is never a *column* or a
@@ -103,11 +103,14 @@ ever kicked off by hand, it goes through `copilotkit`, never `agent.runAgent()`,
 drops registered tools. Section 9 of the spec is the authority, including why an env-var toggle in
 one checkout was rejected.
 
-**The Runsheet is written**, at `docs/runsheet.md`: the five processes, the three-tab window, the
-running order with every pinned prompt, the night-before and at-the-door lists, the recovery table
-and the rehearsal plan. It is the document the talk is presented from, so it records what the
-machine actually does rather than what the spec predicted it would — the two disagreed on how many
-names `pnpm dev` prints, and the spec was corrected to three in the same change.
+**`docs/runsheet.md` is written, and on any question of what the machine does on the day it beats
+the spec.** The spec predicted `pnpm dev` would print four names; it prints three, and section 5
+and section 12 were corrected rather than the Runsheet written to match them. Everywhere else the
+spec stays the authority, section by section, as the rest of this file says. The Runsheet carries
+the five processes, the three-tab window, the running order with every pinned prompt, the
+night-before and at-the-door lists, recovery, and rehearsal. It copies the pinned prompts out of
+section 10 on purpose — you cannot present from a document that sends you to another file for the
+words you are typing — so a prompt reworded in rehearsal has to be changed in both.
 
 `pnpm-workspace.yaml` lists all five members and one of them is still an empty name: `slides/`
 (Slidev). pnpm ignores a member whose directory is absent, so `pnpm install` and `pnpm dev` both

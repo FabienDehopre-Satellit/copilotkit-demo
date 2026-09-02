@@ -1130,7 +1130,7 @@ correct Board state. Anything under 5/5 gets its **wording** changed, never its 
 nothing is designated as the cut. This is how beat 4 finally gets tested.
 
 **Full run-throughs, at least two**, out loud and timed, one of them on the real projector in the real
-room. Two things stay unverified until then: whether `agent.cs` at ~31 lines fits one screen at
+room. Two things stay unverified until then: whether the `agent.cs` read-through is legible at
 presentation font, and whether traces 1 and 2 are legible from the back row.
 
 **Timing without a stopwatch on stage.** Slidev's presenter view shows elapsed time. Four checkpoints:

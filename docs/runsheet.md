@@ -21,7 +21,8 @@ after a run-through.
 
 **Three names in the parallel stream — `app`, `runtime`, `agent` — and that is correct, not a broken
 install.** `mcp` has no `dev` script because the runtime spawns it, and `slides` has `present`
-instead of `dev`, so `--if-present` skips both.
+instead of `dev`, so `--if-present` skips both — and until the deck is built, pnpm skips `slides`
+for the simpler reason that the directory is not there yet.
 
 **The phase-2 worktree never runs `pnpm dev`.** `agent/`, `runtime/` and `mcp/` are byte-identical on
 both branches, so a second `pnpm dev` would only fail to bind 8200 and 8888 — loudly, inside a
@@ -42,7 +43,7 @@ the runtime and the agent ever read it — neither of which the phase-2 worktree
 
 | tab | url | used by |
 |---|---|---|
-| deck | `localhost:3030` | all hour |
+| Deck | `localhost:3030` | all hour |
 | phase 1 | `localhost:4200` | beats 1 to 6 |
 | phase 2 | `localhost:4300` | beat 7 |
 
@@ -67,7 +68,10 @@ which needs sequence to read.
 ## The running order
 
 Seven beats, ~65 minutes, no hard cap. The prompts are pinned: type them as written, because the
-wording is what makes each beat land. [§10](./demo-spec.md#10-the-beats) is the authority.
+wording is what makes each beat land, and they are copied here rather than linked because a
+document you present from cannot send you to another file for the words you are about to type.
+[§10](./demo-spec.md#10-the-beats) is still where a prompt is *decided* — rehearsal changes wording
+(see below), and a change made there has to land in this table too.
 
 | beat | tab | prompt | what should happen | clock |
 |---|---|---|---|---|
@@ -80,7 +84,7 @@ wording is what makes each beat land. [§10](./demo-spec.md#10-the-beats) is the
 | 4 | 4200 | *Put Bruno's task in done.* | It asks **which** one. Answer *the equipment checklist* and it moves T-5 | |
 | 5a | 4200 | *Add a task to book the training room for the induction day* | `createTask`, T-9, rendered as a Task card | |
 | 5b | 4200 | *Show me the board* | `showBoard`, mini three-column board in the transcript | |
-| 6 | 4200 | *Who in the team directory has done data or integration work? Put them on the HR spreadsheet import.* | `find_teammates` then `assignTask` in one turn, both in plain wildcard panels. The answer is **Ines**, on T-2 | **~40** at end |
+| 6 | 4200 | *Who in the team directory has done data or integration work? Put them on the HR spreadsheet import.* | `find_teammates` then `assignTask` in one turn — the MCP call in a plain wildcard panel, the assign as its one-sentence outcome. The answer is **Ines**, on T-2 | **~40** at end |
 | — | 3030 | slide 14 architecture, slides 15 to 17, the C# read-through | | **~43** at beat 7 |
 | 7a | **4300** | *Amira finished the profile page — mark it done.* | Identical to 3a, fresh Seed | |
 | 7b | **4300** | *Add a task to book the training room for the induction day* | Identical to 5a, card and all | |
@@ -95,9 +99,9 @@ a correction rather than an arbitrary move.
 
 ## Night before
 
-1. Capture trace 1 and finish the deck. Trace 1 comes from a real beat-1 turn, via a throwaway
+1. Capture Trace 1 and finish the Deck. Trace 1 comes from a real beat-1 turn, via a throwaway
    `console.log` in `runtime/src/main.ts` that is deleted again immediately.
-2. `slidev export` to `slides/deck.pdf`, and **commit it**. It is the deck's only fallback.
+2. `slidev export` to `slides/deck.pdf`, and **commit it**. It is the Deck's only fallback.
 3. Rebase `phase-2` onto `main`.
 4. `git diff main phase-2 --stat` shows **exactly one file**, `app/src/app/app.config.ts`, six lines.
    This is a check, not a vibe: that diff is on slide 15 and is only true if nothing drifted.
@@ -149,8 +153,9 @@ demo, shown as your demo, is a substitution the room feels.
 
 Two activities, weeks apart.
 
-**Prompt drilling, during the build.** Every pinned prompt in the running order above, run about five
-times each from its correct Board state. Anything under 5/5 gets its **wording** changed, never its
+**Prompt drilling, during the build.** All twelve pinned prompts — the eleven typed in the running
+order above, plus beat 4's answer to the question the agent asks back — run about five times each
+from its correct Board state. Anything under 5/5 gets its **wording** changed, never its
 beat dropped — nothing is designated as the cut, so a beat that will not run reliably is a wording
 problem by definition. This is how beat 4 finally gets tested: its success criterion is the model
 *declining to act*, which is a model behaviour and not a code path, so it can only be measured by
@@ -158,7 +163,7 @@ repetition.
 
 **Full run-throughs, at least two**, out loud and timed, one of them on the real projector in the
 real room. Two things stay unverified until then: whether the `agent.cs` read-through is legible at
-presentation font, and whether traces 1 and 2 are readable from the back row.
+presentation font, and whether Traces 1 and 2 are readable from the back row.
 
 **Timing without a stopwatch on stage.** Slidev's presenter view shows elapsed time. Four
 checkpoints, also marked in the running order:
