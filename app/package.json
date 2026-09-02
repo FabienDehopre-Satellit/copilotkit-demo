@@ -8,6 +8,7 @@
     "build": "ng build"
   },
   "dependencies": {
+    "@ag-ui/client": "catalog:",
     "@angular/cdk": "catalog:",
     "@angular/common": "catalog:",
     "@angular/compiler": "catalog:",

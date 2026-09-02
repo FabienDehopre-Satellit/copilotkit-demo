@@ -580,12 +580,18 @@ versions inline, which means the `--prerelease` flag disappears from the run sto
 `dotnet project convert agent.cs` is the answer to "but is this a real project?", which this audience
 will ask.
 
-Roughly 31 lines. The whole file is one screen, which is what makes the read-through work.
+**About 105 lines, and it was specced at 31.** The one-screen read-through this section originally
+promised is gone, and the reason is the second workaround in
+[The continuation fix](#the-continuation-fix-and-why-it-is-not-optional-either), found by playing
+beat 7 rather than by reading anything. What survives is the shape: the wiring is still one screen,
+the two workarounds sit under it, and each is its own slide with its own reason. Do not try to win
+the line count back by deleting either of them.
 
 Contents:
 
-- `#:package Microsoft.Agents.AI.Hosting.AGUI.AspNetCore@1.19.0-preview.260822.1` and
-  `#:package DotNetEnv@<pinned>`.
+- `#:package Microsoft.Agents.AI.Hosting.AGUI.AspNetCore@1.19.0-preview.260822.1`,
+  `#:package Microsoft.Agents.AI.OpenAI@1.19.0` — the GA half, for the OpenAI client and
+  `AsAIAgent` — and `#:package DotNetEnv@<pinned>`.
 - `Env.Load("../.env")`.
 - `builder.WebHost.UseUrls("http://localhost:8888")`. Learn passes the port as `--urls` on the
   command line. Putting it in the file keeps the run command at exactly `dotnet run agent.cs` with no
@@ -628,7 +634,9 @@ on `ChatOptions.AdditionalProperties[agui_input]` for the app to recover via `Tr
 The framework says in a doc comment that this is your job.
 
 The fix is about 11 lines, no new package reference, and no class, since `AIAgentBuilder` has an
-anonymous middleware overload. It goes between `AsAIAgent(...)` and `MapAGUIServer(...)`:
+anonymous middleware overload. It goes between `AsAIAgent(...)` and `MapAGUIServer(...)`. Keep it as
+its own `.Use(...)`: the second workaround below is a second one, so that each is a single idea on a
+slide.
 
 ```csharp
 .AsBuilder()
@@ -661,6 +669,38 @@ eleven lines of C#" plays better to a mostly-.NET room than "look, no code". Sli
 
 **Pin the AG-UI package version exactly.** This is undocumented behaviour, so a future preview could
 start folding context in automatically and double the board in the prompt.
+
+### The continuation fix, and why it is not optional either
+
+Settled in [#29](https://github.com/FabienDehopre-Satellit/copilotkit-demo/issues/29), by playing the
+beat. Nothing in the research predicted it and nothing in the docs describes it.
+
+**Once a turn has run a frontend tool, `AGUI.Server` 0.0.5 reads every later turn in that thread as a
+continuation.** `ToChatRequestContext` sees a completed tool call and its result in the history and
+takes the resume path, which re-declares the tools the model has *not* called as bare
+`AIFunctionDeclaration`s rather than approval-required functions. A declaration is not invocable, so
+`FunctionInvokingChatClient` never stops on it, and the continuation branch of the event mapping
+swallows the plain `FunctionCallContent` instead of emitting `TOOL_CALL`. The run finishes
+successfully and emits nothing at all.
+
+Live, that is beat 7 answering its first prompt and then going dead on its second — the two prompts
+are one thread in one tab, and the second is the one that renders the Task card.
+
+**0.0.6 fixes it upstream and cannot be taken.** It writes explicit JSON nulls where the pinned
+`@ag-ui/client` 0.0.57 — the version `@copilotkit/angular` 0.3.1 depends on exactly — declares the
+field `optional()`, so its zod parse rejects `RUN_STARTED` and every turn dies rather than the second
+one. Bumping the client is not available either: it is a transitive pin of the Angular package, and
+phase 1 must not change. The same bug is present in 0.0.3, so going back is not a route out.
+
+So `agent.cs` does what 0.0.6 does, in a second `.Use(...)`: walk `ChatOptions.Tools`, and re-present
+each bare declaration as `new ApprovalRequiredAIFunction(new FrontendTool(declaration))`. This costs
+the one class the original spec was proud not to need — `FrontendTool`, which forwards name,
+description and schema to the declaration and throws from `InvokeCoreAsync`, unreachable because
+approval terminates the run first. `AIFunctionFactory` cannot stand in for it: no overload takes an
+explicit JSON schema, and the schema is exactly what has to survive.
+
+**This is the reason the version pins are exact, restated with teeth.** Two package versions are now
+load-bearing in opposite directions and the demo sits between them.
 
 ### Packages and where the protocol lives
 
@@ -1222,6 +1262,7 @@ Every ticket that fed this document.
 | [#15](https://github.com/FabienDehopre-Satellit/copilotkit-demo/issues/15) | `MapAGUIServer` drops `context`, and the 11-line fix |
 | [#17](https://github.com/FabienDehopre-Satellit/copilotkit-demo/issues/17) | Five processes, three tabs, the Runsheet, recovery, rehearsal |
 | [#27](https://github.com/FabienDehopre-Satellit/copilotkit-demo/issues/27) | Reset sets the thread id as a binding, not an agent write, and pays the welcome screen for it |
+| [#29](https://github.com/FabienDehopre-Satellit/copilotkit-demo/issues/29) | The continuation fix, `agent.cs` at ~105 lines rather than 31, `@ag-ui/client` declared on `main` |
 
 Research write-ups live on their own branches under `docs/research/`:
 `angular-surface-area`, `agent-state-in-angular`, `runtime-and-mcp`, `maf-over-agui`,

@@ -8,6 +8,7 @@ packages:
 # Every version is pinned exactly, no ranges. `ng new` and `ng add` write carets and know
 # nothing about catalogs, so scaffold first and hoist the resolved versions here by hand.
 catalog:
+  '@ag-ui/client': 0.0.57
   '@ai-sdk/mcp': 1.0.77
   '@angular/build': 22.1.6
   '@angular/cdk': 22.1.4
