@@ -292,7 +292,7 @@ Root `package.json` carries `"dev": "pnpm run -r --parallel --if-present dev"`, 
 `--parallel` is required rather than stylistic. pnpm's own help calls it the preferred flag for
 long-running processes, and plain `-r run` sorts topologically and blocks on whichever server starts
 first. `-r` does not match the workspace root, so there is no recursion. `--if-present` is what keeps
-`mcp` and `slides` out of the stream, holding the projected output at four names.
+`mcp` and `slides` out of the stream, holding the projected output at three names.
 
 `agent/package.json` is exactly `{"name": "agent", "private": true, "scripts": {"dev": "dotnet run agent.cs"}}`.
 No `version`, no dependencies, so it never touches the catalog. It makes the .NET project a
@@ -1093,7 +1093,7 @@ breaks.
 
 ### At the door
 
-1. `pnpm dev` in the main worktree. Wait for all four names in the stream.
+1. `pnpm dev` in the main worktree. Wait for all three names in the stream.
 2. `ng serve --port 4300` in the phase-2 worktree.
 3. `pnpm present` in `slides/`.
 4. One throwaway prompt into 4200, one into 4300. **The 4300 one is not optional.** The `.env` hole
