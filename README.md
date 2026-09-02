@@ -1,8 +1,8 @@
 # copilotkit-demo
 
 The demo from the Satellit talk on [CopilotKit](https://copilotkit.ai) for Angular. An Angular app
-renders a task board — eight Tasks in three columns — with a chat panel beside it, and an agent that
-reads the Board, changes it through tools, and looks people up in a Team directory that lives in a
+renders a Board — eight Tasks in three columns — with a chat panel beside it, and an agent that
+reads that Board, changes it through tools, and looks people up in a Team directory that lives in a
 separate process. Everything is in memory; a reload is a full reset.
 
 The point of the demo is the second half. **Phase 1** puts the agent in a Node CopilotRuntime.
@@ -15,8 +15,8 @@ config change rather than a port.
 | `main` (default) | Phase 1 | `runtime/`, Node, on 8200 |
 | `phase-2` | Phase 2 | `agent/agent.cs`, .NET, on 8888 |
 
-`phase-2` forks from `main` and its entire diff is `app/src/app/app.config.ts` — six lines. Both
-branches carry all four folders; only the Angular config differs.
+`phase-2` forks from `main` and its entire diff is `app/src/app/app.config.ts` — six lines. Every
+workspace member is present on both branches; only that one Angular file differs.
 
 ## Prerequisites
 
@@ -44,26 +44,28 @@ pnpm dev
 Open `http://localhost:4200`.
 
 That starts three processes: `ng serve` on 4200, the runtime on 8200, and the C# agent on 8888.
-**Three names in the output stream is correct.** `mcp/` has no `dev` script because the runtime
-spawns it as a stdio child at startup, and `slides/` uses `present` rather than `dev`.
+**Three names in the output stream is correct**, not a broken install. `mcp/` is the fourth Node
+member and has no `dev` script, because the runtime spawns it as a stdio child at startup.
 
 The agent on 8888 is running but unused on `main` — Angular is pointed at 8200. It starts anyway so
 that Phase 2 needs nothing new started.
 
 ## Running Phase 2
 
+To see Phase 2 on its own, with nothing else running:
+
 ```sh
 git switch phase-2
 pnpm dev
 ```
 
-Open `http://localhost:4200`. Same app, same board, same tools; the runtime on 8200 is now the
-process that is running but unused.
+Open `http://localhost:4200`. Same app, same Board, same tools; the runtime on 8200 is now the
+process that is running but unused. Running the two phases side by side is a different line, below —
+the second checkout must not run `pnpm dev`.
 
 ## Running both at once
 
-Two checkouts of the same repo, sharing one agent. Use a second worktree rather than a second clone,
-so both sides stay on one lockfile and one `node_modules` layout:
+Both branches have to be checked out at the same time, which is what a second worktree is for:
 
 ```sh
 git worktree add ../copilotkit-demo-phase2 phase-2
@@ -75,10 +77,11 @@ Then `localhost:4200` is Phase 1 and `localhost:4300` is Phase 2, and switching 
 browser tab.
 
 **The second worktree runs only `ng serve`.** `runtime/`, `mcp/` and `agent/` are byte-identical on
-both branches, and `main`'s `pnpm dev` already binds 8200 and 8888 unconditionally, so a second
-`pnpm dev` would do nothing but fail to bind both ports. The 4300 tab talks to the 8888 agent the
-first worktree started. Starting the agent from the phase-2 worktree instead does not help — whoever
-comes second still loses the port.
+both branches, and `main`'s `pnpm dev` already binds 4200, 8200 and 8888 unconditionally, so a
+second `pnpm dev` would start nothing new and fail to bind all three. `app/` is the only package
+that genuinely needs two instances. The 4300 tab talks to the 8888 agent the first worktree started;
+starting the agent from the second worktree instead does not help, because whichever one comes
+second still loses the port.
 
 The second worktree needs no `.env`. `.env` is git-ignored, so a fresh worktree has none, and only
 the runtime and the agent ever read it — neither of which this worktree starts.
@@ -102,9 +105,9 @@ the file you open is the file that is running.
 
 - [`CONTEXT.md`](./CONTEXT.md) — the glossary. The words in the code, the UI, and the talk are the
   same words, and this is where they are fixed.
-- [`docs/demo-spec.md`](./docs/demo-spec.md) — the full spec, including every prompt typed on stage
-  and the Board state expected after each one. Section 15 indexes each decision back to the issue
-  that settled it.
+- [`docs/demo-spec.md`](./docs/demo-spec.md) — the full spec. Every decision here is argued there,
+  and section 15 indexes each one back to the issue that settled it.
 - [`docs/runsheet.md`](./docs/runsheet.md) — what to start, check, and do when it breaks on the day.
+  Written for whoever is giving the talk, not for whoever cloned it.
 
 There are no automated tests, on purpose. Verification is running the demo.
