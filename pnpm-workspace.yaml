@@ -47,3 +47,10 @@ allowBuilds:
   lmdb: true
   msgpackr-extract: true
   playwright-chromium: true
+
+# @slidev/cli loads the client's generated UnoCSS safelist with `jiti.import()` and uses the
+# result directly as an array. jiti 2.7.0 stopped interop-unwrapping the default export, so
+# slidev hands UnoCSS `{ default: [...] }`, the 657 client tokens generate nothing, and the deck
+# renders with no theme at all. Pinned back to 2.6.1 until slidev unwraps it itself.
+overrides:
+  jiti: 2.6.1
