@@ -2,14 +2,14 @@
 theme: default
 title: An agent in your Angular app
 info: |
-  CopilotKit for Angular, and then the same demo again in C#.
+  One Angular app with CopilotKit. The agent behind it: first Node, then .NET.
   Internal Satellit talk. https://github.com/FabienDehopre-Satellit/copilotkit-demo
 layout: cover
 ---
 
 # An agent in your Angular app
 
-CopilotKit, and then the same demo again in C#
+One Angular app with CopilotKit. The agent behind it: first Node, then .NET.
 
 <div class="mt-12 opacity-70">
 
@@ -18,12 +18,29 @@ Satellit &middot; internal talk
 </div>
 
 <!--
-Beat 1 is typed while this slide is up. The 4200 tab, cold:
+This slide is up for the whole cold open, in five moves.
 
-  "What usually goes wrong when a company builds its own employee onboarding portal?"
+1. It is on the screen as the room arrives.
+2. The intro, with it still up. Who you are, who this is for, and that it ends in .NET. **Do not
+   preview the agenda and do not describe the app** — slide 3 owns the agenda, and beat 1 only
+   works if they do not yet know there is a Board.
+3. Tab to 4200, cold, and **type** it — do not paste. The prompts are pinned and typing them as
+   written is what keeps that true:
 
-Off-board on purpose. Plain answer, no tool call. Say nothing about how it works yet — that is
-the next thirteen minutes. ~4 minutes on the clock at the end of this.
+     "What usually goes wrong when a company builds its own employee onboarding portal?"
+
+   Off-board on purpose. Plain answer, no tool call.
+4. Talk over the answer while they read it: it is generic, it is about onboarding portals in
+   general, and nothing in it is about the app it is sitting next to. Say nothing about how any
+   of it works — that is the next thirteen minutes.
+5. Tab back to 3030, still on this slide. Then the exit line, and advance on it:
+
+     "That answer took two lines of Angular. Here they are."
+
+The switch back carries no words; it is mechanical, and the room should not spend a sentence
+watching you find a tab.
+
+~4 minutes at the end of this. A gauge for whether to slow down or hurry up, not a cue.
 -->
 
 ---
@@ -65,20 +82,21 @@ architecture slide and disappear in the same breath.
 
 ```text
   Phase 1    Angular  ──▶  Node runtime  ──▶  OpenAI
-  Phase 2    Angular  ──▶  C# agent      ──▶  OpenAI
+  Phase 2    Angular  ──▶  .NET agent    ──▶  OpenAI
 ```
 
 </div>
 
 <v-click>
 
-Same app. Same Board. Same five tools. **One line of Angular changes between them.**
+Same app. Same Board. The same tools doing the same things.
+**One line of Angular changes between them.**
 
 </v-click>
 
 <v-click>
 
-Phase 2 is where most of you live, so it gets a real read-through, not an epilogue.
+Most of you write .NET. So phase 2 gets the code on screen, line by line, not a summary slide.
 
 </v-click>
 
@@ -157,7 +175,7 @@ which is the gap the next slide is built on.
 
 <div class="mt-8">
 
-Everything between here and the C# is those four things. The rest is plumbing.
+Everything between here and the .NET agent is those four things. The rest is plumbing.
 
 </div>
 
@@ -281,16 +299,26 @@ the free visual cue that they came from two different places.
 <div class="mt-8">
 
 `@copilotkit/angular` **0.3.1** — a first-party, signal-based port of the React package. MIT.
-Two months old, twenty-five versions, so the version is pinned exactly and so is everything else
-in this repo.
+
+React is the original. Angular, Vue and React Native are supported the same way — and so are
+Slack and Teams.
 
 </div>
 
 </v-click>
 
 <!--
-Do not oversell the maturity and do not apologise for it either. The pinning is the answer to
-"is this safe to try", and this room pins things for a living.
+Do not oversell the maturity and do not apologise for it either. `0.3.1` on the slide says
+"zero-major" without you having to editorialise in either direction.
+
+The 8200 is the url they read on slide 2, finally getting a name. Say the number once and move
+on — do not explain the choice of port.
+
+Introduce the runtime as a **box**, not as a component. It exists to be removed on slide 14, and
+the phase-2 argument depends on nobody getting attached to it.
+
+If asked whether this is safe to try: every version in the repo is pinned exactly, no ranges. The
+QR on the last slide is the lockfile.
 -->
 
 ---
@@ -322,8 +350,11 @@ Beat 2, on 4200:
 Two Tasks share Bruno and exactly one todo is unassigned, so a right answer proves it read all
 eight rows and two different fields.
 
-Type it before this slide's clicks if the room looks restless — the code is the answer to
-"how did it know", and the question lands better than the answer.
+**Beat 2 runs before this slide, not after it.** The code is the answer to "how did it know",
+and the question lands better than the answer. Come back to 3030 holding it.
+
+The third bullet — `injectAgentStore()` — is the one to drop if you are behind the ~40 checkpoint.
+It answers a question nobody in this room has asked yet. Leave it on the slide for Q&A.
 -->
 
 ---
@@ -379,13 +410,16 @@ prose and never calling the tool. Naming the app as the thing that asks is what 
 on screen on the first turn.
 
 `tools: []` being empty is the load-bearing detail for beat 7. Plant it here.
+
+**Beat 3 runs before this slide.** They watch four mutations, including the dialog, and then read
+the registrations that produced them.
 -->
 
 ---
 layout: statement
 ---
 
-# It resolves your words, and it can resolve them wrong
+# The model resolves your words. It can resolve them wrong.
 
 <!--
 Beat 4, on 4200:
@@ -400,6 +434,11 @@ resolved them wrong, which is this slide's own title. That is the most useful th
 no agent experience leaves with, and it is better on purpose here than by accident at beat 6.
 
 No new Angular API on this slide, which is why there is no code on it.
+
+**This slide goes up before beat 4, not after.** It is a prediction, and it has to be one: if the
+model guesses, the room needs the frame already in place for the narration to land in.
+
+The model asks, your code runs — slide 7. This is the asking being wrong, not the running.
 -->
 
 ---
@@ -439,6 +478,9 @@ a way to show — that distinction is the beat.
 
 The card is unconditional. Making it depend on the user asking for "a visual confirmation" fails
 silently, and every other beat here fails loudly or not at all.
+
+**Beat 5 runs before this slide.** They see a Task card and a mini board appear in the transcript,
+and then learn that both came out of the same `component:` field.
 -->
 
 ---
@@ -465,6 +507,9 @@ arbitrary move.
 
 Watch the transcript: `find_teammates` in a plain, ugly panel — a tool this app has never heard
 of — and `assignTask` in its own. Two different places, and the snake_case gives it away.
+
+**This slide goes up before beat 6, not after.** Without it, `find_teammates` scrolling past in a
+plain panel is just another tool call.
 -->
 
 ---
@@ -492,7 +537,7 @@ of — and `assignTask` in its own. Two different places, and the snake_case giv
 
 ```text
   ┌────────────┐                        ┌──────────────┐    ┌──────────┐
-  │  Browser   │───────────────────────▶│  C# agent    │───▶│  OpenAI  │
+  │  Browser   │───────────────────────▶│  .NET agent  │───▶│  OpenAI  │
   │  Angular   │                        │  MAF :8888   │    │          │
   │  :4300     │                        │  AG-UI       │    │          │
   └────────────┘                        └──────────────┘    └──────────┘
@@ -505,7 +550,7 @@ of — and `assignTask` in its own. Two different places, and the snake_case giv
 
 ```text
   ┌────────────┐    ┌──────────────┐    ┌──────────────┐    ┌──────────┐
-  │  Browser   │───▶│ your server  │───▶│  C# agent    │───▶│  OpenAI  │
+  │  Browser   │───▶│ your server  │───▶│  .NET agent  │───▶│  OpenAI  │
   │  Angular   │    │ auth, quotas │    │  MAF :8888   │    │          │
   │            │    │              │    │  AG-UI       │    │          │
   └────────────┘    └──────────────┘    └──────────────┘    └──────────┘
@@ -592,8 +637,8 @@ put in its headers is user-visible, so it has to be a per-user token.
 
 <v-click>
 
-`runtime/` and `mcp/` are still in the repo on that branch. Nothing is calling them. So are the
-slides — this is a repo that contains its own talk.
+**Nothing was deleted.** `runtime/` and `mcp/` are still on that branch, with nothing calling
+them.
 
 </v-click>
 
@@ -604,8 +649,13 @@ may not be on.
 Nothing is trimmed out of this one, comments included, so the line count on the slide is the line
 count the night-before `git diff main phase-2 --stat` check prints.
 
-"Every folder is still there" is the honest answer to the question someone is already forming.
-Admitting it costs less than hiding it.
+Lead with "nothing was deleted", not with the admission. It is the strongest evidence on the
+slide: the Node tier did not have to be removed for the app to stop needing it. That is the
+difference between a swap and a rewrite, and it is what they will be asked when they pitch this
+internally.
+
+If pushed: `runtime/` and `mcp/` are untouched on `phase-2`, nothing calls them, and the
+`--stat` check the night before is what proves the diff is one file.
 -->
 
 ---
@@ -781,7 +831,7 @@ break across a backend swap. The payoff is sameness. Let it be boring.
   whole claim.
 - **The key**: `dotnet user-secrets` rather than a root `.env`. The `.env` is a demo convenience
   and nothing else.
-- **MCP into MAF**: the directory moves into the C# agent rather than disappearing.
+- **MCP into MAF**: the directory moves into the .NET agent rather than disappearing.
 
 </v-clicks>
 
@@ -791,10 +841,13 @@ break across a backend swap. The payoff is sameness. Let it be boring.
 
 ## Licensing
 
-`selfManagedAgents` — the phase-2 prop — is documented as an Enterprise-tier feature. **The gate
-is a commercial term, not a code path**: every package is MIT, the check fails open, there is no
-licence server and no phone-home. An unlicensed machine hits zero limits. The obligation for
-production use is real regardless.
+Phase 2 uses `selfManagedAgents`. CopilotKit's own source calls it Enterprise-tier and says the
+signal is *"advisory and client-side only (not enforced)"* — every package is MIT, the check fails
+open, there is no licence server and no phone-home.
+
+One feature really is gated: **saved chat history**, the conversation list this app never shows.
+
+Their docs ask for an Enterprise conversation before production. An internal talk isn't production.
 
 </div>
 
@@ -802,10 +855,24 @@ production use is real regardless.
 
 <!--
 "Could we use this here" is the question this room is actually holding. Answer it plainly and do
-not editorialise: the technical gate is absent, the commercial obligation is not.
+not editorialise: the technical gate is absent, the commercial obligation is not. The quoted
+fragment is CopilotKit's, not yours, which is what keeps it from sounding like a rationalisation.
 
-The one thing that genuinely is gated is the threads drawer, which is why this app never mounts
-it.
+Ammunition, if pushed on "how do you know" — this came from reading the published tarballs, not
+the marketing pages:
+
+  - `selfManagedAgents` and the free dev-only option are the same object spread in
+    `@copilotkit/angular@0.3.1`. No branch, no key lookup, no entitlement call, not even a warning
+  - `checkFeature` fails open, by their own source comment. The watermark ships hard-disabled
+  - verification is a local Ed25519 signature check. Air-gapped behaves identically
+  - every package is MIT. No BSL, no Elastic licence
+
+The gated one is the threads drawer: `licensed = licensePresent && checkFeature("threads")`. They
+needed a second condition *because* `checkFeature` fails open — that is what enforcement looks
+like when they mean it, and nothing like it exists anywhere near the agent path. Under
+`selfManagedAgents` with no `runtimeUrl` it hangs in `licensePending` forever, which is why this
+app never mounts it. Say "saved chat history" on stage; "threads drawer" means nothing to a room
+that has never seen one.
 -->
 
 ---
@@ -844,7 +911,7 @@ The QR is what makes "the editor is never projected" cost nothing: it is a real 
 app, and they can have it.
 
 Both branches are there. `main` is phase 1, `phase-2` is phase 2, and the README says how to run
-them at the same time.
+them at the same time. The slides are in there too — this is a repo that contains its own talk.
 
 Q&A from here. Nine minutes, and it absorbs any overrun.
 -->

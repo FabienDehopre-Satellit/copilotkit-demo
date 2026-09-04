@@ -750,6 +750,15 @@ Two riders. The threads drawer *is* genuinely gated and hangs in `licensePending
 `selfManagedAgents`, so it is never mounted (§2). And the commercial obligation for production use is
 real regardless of the missing technical gate, which is why licensing gets a section on slide 18.
 
+**Both riders belong on the slide, not in the presenter note**
+([#47](https://github.com/FabienDehopre-Satellit/copilotkit-demo/issues/47)). A slide that asserts the
+gate is commercial while the exception hides in a note makes the speaker contradict their own slide on
+the first question from the floor — and the exception is the better evidence anyway: CopilotKit needed
+a *second* condition to make that one gate bite, and nothing like it exists near the agent path. On
+stage it is "saved chat history", never "the threads drawer": the room has never seen one. The
+tarball-level evidence stays in the note, as the answer to "how do you know", along with the fact that
+the Enterprise claim is a source comment rather than anything on the pricing page.
+
 ---
 
 ## 9. The branch diff
@@ -823,10 +832,24 @@ them.
 **These are targets, not a budget.** Running 5 to 10 minutes long is acceptable, and **nothing is
 designated as the drop-if-long beat**. Overrun is absorbed by Q&A.
 
-Deck and app interleave: a slide names the capability, the beat demonstrates it. Two exceptions. Beat
-1 runs *before* the opener, so the room sees the thing move before it gets 13 minutes of vocabulary.
-And the phase-2 architecture slide is a real 2 to 3 minute diagram, because that fork is the talk's
-argument.
+Deck and app interleave, and **the slide's form decides which comes first**
+([#47](https://github.com/FabienDehopre-Satellit/copilotkit-demo/issues/47)). A **code** slide — 9,
+10, 12 — *follows* its beat: the room asks "how did it do that" and the code is the answer, which is
+the move beat 1 → slide 2 already makes, in the past tense. A **`layout: statement`** slide — 11 and
+13 — *precedes* its beat, because framing is all it does: slide 11 has to be up before beat 4 or the
+recovery move has no frame to narrate into, and slide 13 has to be up before beat 6 or
+`find_teammates` scrolling past is just another tool call. This is the same split
+[§11](#11-the-deck) already makes on whether a new Angular API appears — a slide with code on it can
+only answer a question the room is already holding.
+
+The earlier formulation here, "a slide names the capability, the beat demonstrates it", was
+slide-first throughout and is superseded: it made slides 9 to 13 answer questions nobody had asked
+yet, and the Runsheet never carried them in the running order at all, so the ordering had never
+actually been decided. It is decided now, and the Runsheet's table carries it row by row.
+
+Two things stand outside the rule. Beat 1 runs *before* the opener, so the room sees the thing move
+before it gets 13 minutes of vocabulary. And the phase-2 architecture slide is a real 2 to 3 minute
+diagram, because that fork is the talk's argument.
 
 ### Beat 1: there is a chat, and it is cheap
 
@@ -1007,25 +1030,32 @@ Nineteen slides.
 
 | # | slide | block |
 |---|---|---|
-| 1 | Title, up while beat 1 is typed | cold open, ~4 min |
+| 1 | Title, up for the whole cold open: arrival, the intro, and again after the tab back from beat 1 | cold open, ~4 min |
 | 2 | Code: `<copilot-chat />` + the provider `runtimeUrl`, the whole frontend so far | |
 | 3 | Where we're going: the phase-1 / phase-2 fork | |
 | 4 | Trace 1, real, beat 1's turn. *Nothing here knows about your app* | opener, ~13 min |
 | 5 | Agent = model + loop + your app's context, defined against trace 1's gaps | |
 | 6 | Trace 2, hand-built, beat 3's turn | |
 | 7 | Tool-calling defined: the model requests, your code runs, the loop feeds the result back. `maxSteps` lands here | |
-| 8 | CopilotKit named: chat UI + runtime + protocol. `@copilotkit/angular` pinned. AG-UI named, defined at slide 14 | |
+| 8 | CopilotKit named: chat UI + runtime + protocol. `@copilotkit/angular` **0.3.1**, MIT, and the rest of the family — React, Vue, React Native, Slack, Teams. AG-UI named, defined at slide 14 | |
 | 9 | Beat 2, "the agent reads the Board" + `connectAgentContext()`, accessor not object. Carries the one-line shared-state mention | beats 2 to 6, ~23 min |
 | 10 | Beat 3, "the agent changes the Board" + `registerFrontendTool()`, with the confirm variant | |
-| 11 | Beat 4, "it resolves your words, and it can be wrong" (title card) | |
+| 11 | Beat 4, "the model resolves your words. It can resolve them wrong." (title card, and it goes up *before* the beat) | |
 | 12 | Beat 5, "a tool can return UI" + `component:`. Mutating tool vs rendering tool | |
 | 13 | Beat 6, "reaching outside the app: MCP" (title card) | |
 | 14 | Architecture, three builds on one slide: Node tier present, gone, back in front in production. AG-UI defined here. Carries the browser-direct caveat and *MCP moves to MAF* | phase 2, ~14 min |
-| 15 | The diff: six lines of `app.config.ts` at full size, plus the folders-are-still-there clause | |
+| 15 | The diff: six lines of `app.config.ts` at full size, plus *nothing was deleted* — `runtime/` and `mcp/` still on the branch, uncalled | |
 | 16 | `agent.cs`, two columns: the wiring and the continuation fix | |
 | 17 | The context-folding lambda zoomed (~11 lines): the step phase 1's Node agent was doing invisibly | |
 | 18 | Taking this further: `AIFunctionFactory.Create`, `user-secrets`, licensing, MCP into MAF | close |
 | 19 | Resources: QR to the repo, CopilotKit Angular docs, Microsoft's AG-UI sample, the `dotnet run app.cs` announcement | |
+
+**Slide 8 discloses the version and stops there.** `0.3.1` on screen says "zero-major" without
+editorialising in either direction, which is what the slide's own note asks for; the age and release
+counts that used to sit beside it were apologising, and were wrong — 20 of the package's published
+versions are `-canary` CI prereleases. The exact-pinning argument moves into the presenter note, held
+for a question, because it is a fact about this repo's lockfile rather than about CopilotKit
+([#47](https://github.com/FabienDehopre-Satellit/copilotkit-demo/issues/47)).
 
 Slides 9 to 13 split by whether a new Angular API appears. Beats 2, 3 and 5 each introduce one whose
 code is three lines, so the code is on the slide, because this room's recurring question is "yes, but
