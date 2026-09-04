@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import type { AngularToolCall, ToolRenderer } from '@copilotkit/angular';
 
-import { BoardStore, createdTaskId } from '../core/board-store';
-import type { Status } from '../models/task';
-import { TaskCard } from '../board/task-card';
+import { BoardStore, createdTaskId } from '../../core/board-store';
+import type { Status } from '../../models/task';
+import { TaskCard } from '../../board/task-card/task-card';
 
 /** `createTask`'s arguments. A type alias, not an interface, so it satisfies the constraint. */
 export type CreateTaskArgs = {

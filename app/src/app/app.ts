@@ -2,10 +2,10 @@ import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/cor
 import { connectAgentContext, CopilotChat, registerRenderToolCall } from '@copilotkit/angular';
 import { z } from 'zod';
 
-import { Board } from './board/board';
+import { Board } from './board/board/board';
 import { BoardStore } from './core/board-store';
 import { registerBoardTools } from './tools/board-tools';
-import { ToolCallPanel } from './tool-renderers/tool-call-panel';
+import { ToolCallPanel } from './tool-renderers/tool-call-panel/tool-call-panel';
 
 @Component({
   selector: 'app-root',

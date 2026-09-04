@@ -4,10 +4,10 @@ import { z } from 'zod';
 
 import { BoardStore } from '../core/board-store';
 import { STATUSES, type Status } from '../models/task';
-import { CreatedTask } from '../tool-renderers/created-task';
-import { DeleteConfirm } from '../tool-renderers/delete-confirm';
-import { MiniBoard } from '../tool-renderers/mini-board';
-import { ToolOutcome } from '../tool-renderers/tool-outcome';
+import { CreatedTask } from '../tool-renderers/created-task/created-task';
+import { DeleteConfirm } from '../tool-renderers/delete-confirm/delete-confirm';
+import { MiniBoard } from '../tool-renderers/mini-board/mini-board';
+import { ToolOutcome } from '../tool-renderers/tool-outcome/tool-outcome';
 
 /**
  * Every tool addresses a Task by id, and every description that takes one ends with this.
