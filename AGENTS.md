@@ -32,12 +32,19 @@ live answer back, the agent answers about the Board because `App` hands it one
 comes back as UI, and a directory lookup chains into `assignTask` in a single turn. Beat 7 plays off
 the `phase-2` branch, described below.
 
+**`app/src/app/` is grouped, not flat.** The root `App` component stays at the top (`app.ts`,
+`app.html`, `app.css`, `app.config.ts`); everything else sits under `models/` (`task.ts`,
+`seed.ts`), `core/` (`board-store.ts`), `board/` (the `board/` and `task-card/` component
+folders), `tools/` (`board-tools.ts`) and `tool-renderers/` (the `created-task/`,
+`delete-confirm/`, `mini-board/`, `tool-outcome/` and `tool-call-panel/` component folders). Every
+component owns a folder named after it holding its `.ts`/`.html`/`.css` trio.
+
 **Reset demo** sits in the header and does both halves: the Board signal goes back to `SEED_TASKS`
 and `threadId` takes a fresh id, bound into `<copilot-chat [threadId]>`, which is what empties the
 transcript. Section 2 of the spec is the authority on why, including what binding the thread id
 costs.
 
-**All five tools are registered in Angular**, in `board-tools.ts`, against a root `BoardStore` that
+**All five tools are registered in Angular**, in `app/src/app/tools/board-tools.ts`, against a root `BoardStore` that
 owns the Board signal and is the only thing that writes to it. `deleteTask` is the one destructive
 verb and the only one that confirms, through `registerHumanInTheLoop` and the `DeleteConfirm`
 component. `tools[]` on the runtime is empty and stays empty — every Board tool is a frontend tool,
@@ -141,7 +148,7 @@ the request did still carry the two Team directory tools the runtime attaches un
 `function_call_output` — checked against a real beat-3 turn rather than invented.
 
 **The Deck copies code out of the repo and nothing keeps the two in step.** Slides 2, 9, 10, 12, 15,
-16 and 17 carry pasted snippets of `app.config.ts`, `app.ts`, `board-tools.ts`, the branch diff and
+16 and 17 carry pasted snippets of `app.config.ts`, `app.ts`, `tools/board-tools.ts`, the branch diff and
 `agent.cs`. Its presenter notes carry all eleven pinned prompts too. So a prompt reworded in
 rehearsal now has to change in three places — section 10 of the spec, the Runsheet, and
 `slides/slides.md` — and the deck has to be re-exported; a changed source file has to be carried into

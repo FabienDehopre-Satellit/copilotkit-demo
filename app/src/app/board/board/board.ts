@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 
-import { groupByStatus, type Task } from './task';
-import { TaskCard } from './task-card';
+import { groupByStatus, type Task } from '../../models/task';
+import { TaskCard } from '../task-card/task-card';
 
 @Component({
   selector: 'app-board',

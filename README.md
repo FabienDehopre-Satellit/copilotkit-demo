@@ -95,7 +95,7 @@ Five files carry the whole demo.
 |---|---|
 | [`app/src/app/app.config.ts`](./app/src/app/app.config.ts) | The one file that differs between the phases. `runtimeUrl` on `main`, `selfManagedAgents` with an `HttpAgent` on `phase-2` |
 | [`app/src/app/app.ts`](./app/src/app/app.ts) | One `connectAgentContext()` entry is the entire read channel, and a wildcard `registerRenderToolCall({ name: '*' })` is how a tool the app has never heard of still comes back as UI |
-| [`app/src/app/board-tools.ts`](./app/src/app/board-tools.ts) | The five Board tools, all frontend tools, each with a `component:` that puts its result in the transcript. `deleteTask` is the one that confirms first |
+| [`app/src/app/tools/board-tools.ts`](./app/src/app/tools/board-tools.ts) | The five Board tools, all frontend tools, each with a `component:` that puts its result in the transcript. `deleteTask` is the one that confirms first |
 | [`runtime/src/main.ts`](./runtime/src/main.ts) | The whole Phase 1 tier: one agent, an empty `tools: []`, and the MCP directory attached as `mcpClients` |
 | [`agent/agent.cs`](./agent/agent.cs) | The Phase 2 tier, on one screen. It registers no tools either — the Angular ones ride in on `RunAgentInput.tools`. The middleware block in the middle is a workaround, and the comments say what for |
 

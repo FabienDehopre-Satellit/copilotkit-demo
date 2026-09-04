@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import type { HumanInTheLoopToolCall, HumanInTheLoopToolRenderer } from '@copilotkit/angular';
 
-import { BoardStore } from './board-store';
+import { BoardStore } from '../../core/board-store';
 
 /** `deleteTask`'s one argument. A type alias, not an interface, so it satisfies the constraint. */
 export type DeleteTaskArgs = { id: string };

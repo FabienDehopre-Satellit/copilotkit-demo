@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
-import type { Task } from './task';
+import type { Task } from '../../models/task';
 
 @Component({
   selector: 'app-task-card',
