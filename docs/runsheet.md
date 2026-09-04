@@ -79,16 +79,32 @@ notes, `slides/slides.md`, which copy them a third time for the same reason. The
 | 1 | 4200 | *What usually goes wrong when a company builds its own employee onboarding portal?* | Plain answer, no tool call. Off-board on purpose | **~4** at end |
 | — | 3030 | opener: slides 2 to 8 | | **~17** at end |
 | 2 | 4200 | *What's Bruno working on, and is anything not assigned to anyone yet?* | Names T-5 and T-6, and T-3 as unassigned | |
+| — | 3030 | slide 9, `connectAgentContext` | the answer to "how did it know" | |
 | 3a | 4200 | *Amira finished the profile page — mark it done.* | `moveTask`, T-4 to `done` | |
 | 3b | 4200 | *Put Dries on picking an SSO provider.* | `assignTask`, T-3 to Dries | |
 | 3c | 4200 | *Actually, drop the domain registration task.* | `deleteTask` on T-7, confirm dialog, you click through | |
+| — | 3030 | slide 10, the registrations | | |
+| — | 3030 | slide 11, *the model resolves your words* | **before** beat 4, not after | |
 | 4 | 4200 | *Put Bruno's task in done.* | It asks **which** one. Answer *the equipment checklist* and it moves T-5 | |
 | 5a | 4200 | *Add a task to book the training room for the induction day* | `createTask`, T-9, rendered as a Task card | |
 | 5b | 4200 | *Show me the board* | `showBoard`, mini three-column board in the transcript | |
+| — | 3030 | slide 12, `component:` | both cards came out of one field | |
+| — | 3030 | slide 13, MCP | **before** beat 6, not after | |
 | 6 | 4200 | *Who in the team directory has done data or integration work? Put them on the HR spreadsheet import.* | `find_teammates` then `assignTask` in one turn — the MCP call in a plain wildcard panel, the assign as its one-sentence outcome. The answer is **Ines**, on T-2 | **~40** at end |
 | — | 3030 | slide 14 architecture, slides 15 to 17, the C# read-through | | **~43** at beat 7 |
 | 7a | **4300** | *Amira finished the profile page — mark it done.* | Identical to 3a, fresh Seed | |
 | 7b | **4300** | *Add a task to book the training room for the induction day* | Identical to 5a, card and all | |
+
+**Where a slide sits relative to its beat is decided by the slide's form, not case by case.** A
+**code** slide follows its beat: the room asks "how did it do that" and the code answers, which is
+the move beat 1 → slide 2 already makes, in the past tense. A **`layout: statement`** slide precedes
+its beat, because its whole job is to frame what is about to happen — slide 11 has to be up before
+beat 4 or the recovery move below has no frame to narrate into, and slide 13 has to be up before beat
+6 or `find_teammates` scrolling past is just another tool call. A beat added later gets its answer
+from that rule rather than from this table.
+
+Slides 10 and 11 are one visit to the deck, and so are 12 and 13. The tab changes eleven times all
+hour, not twice.
 
 **No Reset between beats 1 and 6, and none before beat 7.** The 4300 tab is a different origin, so it
 is already on a fresh Seed. Reset on stage is a recovery move only.
