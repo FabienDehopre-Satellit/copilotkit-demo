@@ -1,7 +1,7 @@
 import { Injectable, signal } from '@angular/core';
 
-import { SEED_TASKS } from './seed';
-import { STATUSES, type Status, type Task } from './task';
+import { SEED_TASKS } from '../models/seed';
+import { STATUSES, type Status, type Task } from '../models/task';
 
 /**
  * What `createTask` is given: a Task with no id yet, since the Board issues that. Every field but

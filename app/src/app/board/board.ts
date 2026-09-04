@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 
-import { groupByStatus, type Task } from './task';
+import { groupByStatus, type Task } from '../models/task';
 import { TaskCard } from './task-card';
 
 @Component({

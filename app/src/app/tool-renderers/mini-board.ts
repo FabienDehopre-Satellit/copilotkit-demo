@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import type { AngularToolCall, ToolRenderer } from '@copilotkit/angular';
 
-import { BoardStore } from './board-store';
-import { groupByStatus } from './task';
+import { BoardStore } from '../core/board-store';
+import { groupByStatus } from '../models/task';
 
 /** `showBoard` takes nothing. The board it shows is the one the app already holds. */
 export type ShowBoardArgs = Record<string, never>;

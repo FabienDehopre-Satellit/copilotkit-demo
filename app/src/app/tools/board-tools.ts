@@ -2,12 +2,12 @@ import { inject } from '@angular/core';
 import { registerFrontendTool, registerHumanInTheLoop } from '@copilotkit/angular';
 import { z } from 'zod';
 
-import { BoardStore } from './board-store';
-import { CreatedTask } from './created-task';
-import { DeleteConfirm } from './delete-confirm';
-import { MiniBoard } from './mini-board';
-import { STATUSES, type Status } from './task';
-import { ToolOutcome } from './tool-outcome';
+import { BoardStore } from '../core/board-store';
+import { STATUSES, type Status } from '../models/task';
+import { CreatedTask } from '../tool-renderers/created-task';
+import { DeleteConfirm } from '../tool-renderers/delete-confirm';
+import { MiniBoard } from '../tool-renderers/mini-board';
+import { ToolOutcome } from '../tool-renderers/tool-outcome';
 
 /**
  * Every tool addresses a Task by id, and every description that takes one ends with this.
