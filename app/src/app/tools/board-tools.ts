@@ -108,7 +108,7 @@ export function registerBoardTools(): void {
     name: 'deleteTask',
     // "The user is asked to confirm" on its own gets the model asking in prose and never calling
     // the tool, which loses the dialog and the beat with it. Saying who does the asking fixes it.
-    description: `Remove a Task from the board for good. Call this as soon as the user asks: the app puts the confirm dialog in front of them and tells you whether they went through with it, so never ask for confirmation yourself. ${BY_ID}`,
+    description: `Remove a Task from the board for good. Call this as soon as the user asks: the app puts the confirm dialog in front of them and tells you whether they went through with it, so never ask for confirmation yourself, before the call or after it. ${BY_ID}`,
     parameters: z.object({ id: ID }),
     component: DeleteConfirm,
   });
