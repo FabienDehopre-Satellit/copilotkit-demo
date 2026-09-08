@@ -70,8 +70,16 @@ export class DeleteConfirm implements HumanInTheLoopToolRenderer<DeleteTaskArgs>
     this.#respond(this.#board.deleteTask(this.id()));
   }
 
+  // The refusal is the end of the exchange, so it says so. "The user said no" on its own reads to
+  // the model as a question still open, and it asks again in prose — which puts a second confirm
+  // in front of the room right after the dialog it just answered. Naming the answer as final, and
+  // saying what to reply instead, is what closes it.
   protected keep(): void {
-    this.#respond(`The user said no. ${this.id()} was not deleted and the board is unchanged.`);
+    this.#respond(
+      `The user pressed "Keep it" and refused the deletion. ${this.id()} was not deleted and the ` +
+        `board is unchanged. This answer is final: do not ask again and do not offer to delete ` +
+        `it. Reply with one short sentence saying the Task is still on the board.`,
+    );
   }
 
   /** Once only, whichever path got here: a second answer to a question already answered is noise. */

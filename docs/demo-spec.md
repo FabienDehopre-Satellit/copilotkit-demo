@@ -1264,6 +1264,20 @@ the model reads — and the panel that renders it — carry that JSON object.
 The model copes. The room should not have to, so the confirm component unwraps the envelope before
 displaying it. There is no way to intercept it earlier: the wrapping happens inside the library.
 
+### A refused deletion has to say it is refused
+
+Cancelling the confirm dialog is a tool result like any other, and the model reads it as the state
+of the conversation rather than as its end. `The user said no.` on its own leaves the request
+standing, so the model re-asks the question the dialog just asked — in prose, one line under a
+dialog the user has already answered. The room reads that as the confirm step being broken.
+
+Nothing in the code can stop it, because nothing in the code writes the reply. Two sentences do.
+The result the **Keep it** button responds with names the answer as final, forbids asking again,
+and says what to reply instead; `deleteTask`'s description forbids confirming in prose **before the
+call or after it**, where it used to forbid it only before. Both are in the same family as the
+description's first fix — "the user is asked to confirm" getting the model to ask instead of
+calling — and are corrected the same way: say who does the asking, and say when the asking is over.
+
 ### Token cost
 
 Context is re-sent in full on every turn, not once. Eight Tasks of five short fields is about 300
