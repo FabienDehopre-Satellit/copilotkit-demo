@@ -369,7 +369,6 @@ registerFrontendTool({
   description: `Move a Task to a different status. ${BY_ID}`,
   parameters: z.object({ id: ID, status: z.enum(STATUSES) }),
   handler: async ({ id, status }) => board.moveTask(id, status),
-  component: ToolOutcome,
 });
 ```
 
