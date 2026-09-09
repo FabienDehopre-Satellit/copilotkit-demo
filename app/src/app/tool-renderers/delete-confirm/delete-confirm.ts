@@ -40,8 +40,21 @@ export class DeleteConfirm implements HumanInTheLoopToolRenderer<DeleteTaskArgs>
 
   protected readonly status = computed(() => this.toolCall().status);
 
+  /**
+   * The one sentence the room reads, which is not what the model reads.
+   *
+   * A result that closes the turn has to carry its steering in the string, because the string is
+   * the only channel there is — and steering read off a projector is the seam showing. So each
+   * path below hands `#respond` both halves: the full string for the model, this for the screen.
+   * Empty until we answer, so the fallback below covers the frame before that.
+   */
+  readonly #shown = signal('');
+
   /** What we responded with, dug back out of the envelope CopilotKit wraps it in. */
   protected readonly result = computed(() => unwrap(this.toolCall().result));
+
+  /** What the transcript prints: our own sentence, or the raw result if we never set one. */
+  protected readonly outcome = computed(() => this.#shown() || this.result());
 
   /** Arguments stream in, so the id is briefly absent while the status is `in-progress`. */
   protected readonly id = computed(() => this.toolCall().args.id ?? '');
@@ -61,13 +74,25 @@ export class DeleteConfirm implements HumanInTheLoopToolRenderer<DeleteTaskArgs>
     effect(() => {
       const nothingToDelete = this.status() === 'executing' && this.id() !== '' && !this.task();
       if (nothingToDelete) {
-        this.#respond(this.#board.deleteTask(this.id()));
+        const miss = this.#board.deleteTask(this.id());
+        this.#respond(miss, miss);
       }
     });
   }
 
+  // The click is the end of the exchange too, and for the same reason `keep()` says so. A bare
+  // `Deleted T-7 "Register the domain."` leaves the model resuming a turn whose user message is
+  // already answered, with a fact and no instruction as the newest thing in the thread — so it
+  // invents the next step, and what it invents is `showBoard`, which spends beat 5's reveal in
+  // beat 3. The store's sentence stays the opening of the string: the wording of a result lives
+  // next to the write, and the rest closes the turn around it.
   protected confirm(): void {
-    this.#respond(this.#board.deleteTask(this.id()));
+    const deleted = this.#board.deleteTask(this.id());
+    this.#respond(
+      `${deleted} The user pressed "Delete" and the deletion is done. Reply with one short ` +
+        `sentence saying so. Do not call another tool and do not show the board.`,
+      deleted,
+    );
   }
 
   // The refusal is the end of the exchange, so it says so. "The user said no" on its own reads to
@@ -79,15 +104,17 @@ export class DeleteConfirm implements HumanInTheLoopToolRenderer<DeleteTaskArgs>
       `The user pressed "Keep it" and refused the deletion. ${this.id()} was not deleted and the ` +
         `board is unchanged. This answer is final: do not ask again and do not offer to delete ` +
         `it. Reply with one short sentence saying the Task is still on the board.`,
+      `Kept ${this.label()}.`,
     );
   }
 
   /** Once only, whichever path got here: a second answer to a question already answered is noise. */
-  #respond(result: string): void {
+  #respond(result: string, shown: string): void {
     if (untracked(this.answered)) {
       return;
     }
     this.answered.set(true);
+    this.#shown.set(shown);
     this.toolCall().respond(result);
   }
 }

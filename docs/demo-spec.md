@@ -1264,19 +1264,40 @@ the model reads — and the panel that renders it — carry that JSON object.
 The model copes. The room should not have to, so the confirm component unwraps the envelope before
 displaying it. There is no way to intercept it earlier: the wrapping happens inside the library.
 
-### A refused deletion has to say it is refused
+### Either answer to the confirm dialog has to close the turn
 
-Cancelling the confirm dialog is a tool result like any other, and the model reads it as the state
-of the conversation rather than as its end. `The user said no.` on its own leaves the request
-standing, so the model re-asks the question the dialog just asked — in prose, one line under a
-dialog the user has already answered. The room reads that as the confirm step being broken.
+A click on the dialog is a tool result like any other, and the model reads a result as the state of
+the conversation rather than as its end. Both buttons hit this, for the same reason: the turn
+resumes with the user's message already handled, a bare fact as the newest thing in the thread, and
+nothing saying what the turn is now for. The model fills the gap itself.
 
-Nothing in the code can stop it, because nothing in the code writes the reply. Two sentences do.
-The result the **Keep it** button responds with names the answer as final, forbids asking again,
-and says what to reply instead; `deleteTask`'s description forbids confirming in prose **before the
-call or after it**, where it used to forbid it only before. Both are in the same family as the
-description's first fix — "the user is asked to confirm" getting the model to ask instead of
-calling — and are corrected the same way: say who does the asking, and say when the asking is over.
+**Keep it** filled it by re-asking. `The user said no.` on its own leaves the request standing, so
+the model asked the question the dialog had just asked — in prose, one line under a dialog the user
+had already answered. The room reads that as the confirm step being broken.
+
+**Delete** filled it by calling `showBoard`. Nothing asked for it, and §10 ends beat 3 on the
+confirm precisely so that beat 5 is where the mini board first appears; a stray one in beat 3
+spends that reveal twenty minutes early. The same turn also printed several paragraphs of the
+model's own scratchpad in place of a reply — the identical confusion surfacing as text rather than
+as a call.
+
+Nothing in the code can stop either, because nothing in the code writes the reply. Sentences do.
+Each button responds with a string that names its answer as final and says what to reply: **Keep
+it** forbids asking again, **Delete** forbids calling another tool and names `showBoard` as the one
+not to call. `deleteTask`'s description forbids confirming in prose **before the call or after
+it**, where it used to forbid it only before. All of it is the same family as the description's
+first fix — "the user is asked to confirm" getting the model to ask instead of calling — and is
+corrected the same way: say who does the asking, and say when the asking is over.
+
+**Steering is not for the room.** That string is also what the confirm component prints in the
+transcript, and a paragraph of instructions to the model, projected, is the seam showing. So the
+component holds the two apart: each path hands it the full string for the model and one short
+sentence for the screen, and the screen falls back to the raw result only for the frame before an
+answer exists.
+
+One line of the system prompt — *never write your reasoning out* — backs this up on both tiers. It
+is insurance and not the cure: it names nothing about the app, so §11's slide 4 is unaffected, and
+it is copy-pasted into `agent.cs` like the rest of the prompt, so phase 1 and phase 2 do not drift.
 
 ### Token cost
 

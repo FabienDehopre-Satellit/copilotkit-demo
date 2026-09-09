@@ -1,6 +1,6 @@
 <section class="confirm">
   @if (status() === 'complete') {
-    <p class="outcome">{{ result() }}</p>
+    <p class="outcome">{{ outcome() }}</p>
   } @else if (status() === 'in-progress') {
     <p class="outcome">Working out what to delete…</p>
   } @else if (answered()) {

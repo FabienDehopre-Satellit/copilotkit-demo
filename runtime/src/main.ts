@@ -28,6 +28,10 @@ const runtime = new CopilotRuntime({
       prompt: [
         'You are a helpful assistant.',
         'Keep replies short and plain: they are read off a projector.',
+        // Insurance, not the cure — §13. `gpt-5-mini` printed several paragraphs of its own
+        // scratchpad in place of a reply once the confirm dialog left it with nothing to answer;
+        // the confirm now closes itself, and this catches the next turn that goes the same way.
+        'Never write your reasoning out. Reply with the answer and nothing else.',
       ].join('\n'),
       // Every Board tool is a frontend tool registered in Angular, which is what makes
       // phase 2 a config swap rather than a port. Nothing runs in this tier.
