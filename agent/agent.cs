@@ -51,7 +51,8 @@ AIAgent agent = chatClient
     .AsAIAgent(
         name: "BoardAgent",
         instructions: "You are a helpful assistant.\n"
-            + "Keep replies short and plain: they are read off a projector.")
+            + "Keep replies short and plain: they are read off a projector.\n"
+            + "Never write your reasoning out. Reply with the answer and nothing else.")
     // MapAGUIServer reads messages, tools and resume, and drops `context` — the Board would never
     // reach the model, and "mark it done" would have no T-4 to resolve. This is the one thing the
     // Node tier was doing invisibly, in eleven lines. No backend tools: a C# tool here would make

@@ -116,7 +116,7 @@ Thirty seconds. The fork is the argument of the whole talk; it gets its diagram 
   "model": "gpt-5-mini",
   "input": [
     { "role": "developer",
-      "content": "You are a helpful assistant.\nKeep replies short and plain: they are read off a projector." },
+      "content": "You are a helpful assistant.\nKeep replies short and plain: they are read off a projector. …" },
     { "role": "user",
       "content": [{ "type": "input_text",
                     "text": "What usually goes wrong when a company builds its own employee onboarding portal?" }] }
@@ -686,7 +686,8 @@ AIAgent agent = chatClient
     .AsAIAgent(
         name: "BoardAgent",
         instructions: "You are a helpful assistant.\n"
-            + "Keep replies short and plain: they are read off a projector.")
+            + "Keep replies short and plain: they are read off a projector.\n"
+            + "Never write your reasoning out. Reply with the answer and nothing else.")
     .AsBuilder()
     .Use(async (messages, session, options, next, ct) =>
     {
