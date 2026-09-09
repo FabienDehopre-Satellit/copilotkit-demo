@@ -481,6 +481,11 @@ silently, and every other beat here fails loudly or not at all.
 
 **Beat 5 runs before this slide.** They see a Task card and a mini board appear in the transcript,
 and then learn that both came out of the same `component:` field.
+
+If anyone asks about the handler that only returns a sentence: they are right, it does nothing but
+close the turn. Newer CopilotKit has `registerComponent` — name, description, parameters,
+component, no handler — for exactly this. We pin 0.3.1, which predates it, and that pin is what
+holds `@ag-ui/client` at the version phase 2's workaround is built against.
 -->
 
 ---
