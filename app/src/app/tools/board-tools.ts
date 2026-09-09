@@ -116,6 +116,13 @@ export function registerBoardTools(): void {
   // The rendering tool, and the only one of the five that changes nothing. It is registered as an
   // ordinary frontend tool because a tool that renders is an ordinary tool — the whole point of
   // beat 5 is that returning UI is not a separate mechanism.
+  //
+  // `@copilotkit/angular` 0.5.2 has `registerComponent` for exactly this shape — name, description,
+  // parameters, component, and no handler at all — which would delete the handler below. We pin
+  // 0.3.1, which does not export it. The pin is not about this tool: 0.3.1 is what pins
+  // `@ag-ui/client` 0.0.57, and phase 2's `RewrapFrontendTools` is built against that version
+  // talking to AGUI.Server 0.0.5. Moving off it re-opens §8, so the handler stays and returns the
+  // one sentence that closes the turn.
   registerFrontendTool({
     name: 'showBoard',
     // The last sentence is steering, and it belongs here rather than in the result: the board is
