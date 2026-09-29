@@ -125,11 +125,13 @@ export function registerBoardTools(): void {
   // one sentence that closes the turn.
   registerFrontendTool({
     name: 'showBoard',
-    // The last sentence is steering, and it belongs here rather than in the result: the board is
-    // on screen a beat before the reply arrives (§13), so re-listing the Tasks in prose reads as
-    // the agent describing something the room can already see.
+    // Both halves are steering, and they belong here rather than in the result. The second
+    // sentence keeps beat 5 a two-prompt arc: "whenever they ask" alone read as permission, and
+    // the model chained `showBoard` onto `createTask` unasked, spending the prompt before it was
+    // typed. The last: the board is on screen a beat before the reply arrives (§13), so
+    // re-listing the Tasks in prose reads as the agent describing something the room can see.
     description:
-      'Show the user the whole board. Call this whenever they ask to see it: it renders the three columns in the chat and changes nothing. The Tasks are then in front of them, so reply with one short sentence saying the board is on screen, and never list the Tasks yourself.',
+      'Show the user the whole board. Call this only when their latest message asks to see it, and never on your own after another tool, not even to show what that tool changed. It renders the three columns in the chat and changes nothing. The Tasks are then in front of them, so reply with one short sentence saying the board is on screen, and never list the Tasks yourself.',
     parameters: z.object({}),
     handler: async () => 'The board is on screen in the chat.',
     component: MiniBoard,
